@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -46,32 +49,22 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAV1laIt-MaakWc9Qr8Pu3fXe4249i8uzo',
-    appId: '1:692144165649:web:91186fbffae938f3a0b2b0',
-    messagingSenderId: '692144165649',
-    projectId: 'eshop-multivendor',
-    authDomain: 'eshop-multivendor.firebaseapp.com',
-    storageBucket: 'eshop-multivendor.appspot.com',
-    measurementId: 'G-3KRYGZJPMB',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyB7F5pGTk1Yqwj5_ayYsVBcFtVyx29C0MM',
-    appId: '1:692144165649:android:6fc2795776be996fa0b2b0',
-    messagingSenderId: '692144165649',
-    projectId: 'eshop-multivendor',
-    storageBucket: 'eshop-multivendor.appspot.com',
+    apiKey: 'AIzaSyBS5k2QsaQhi5RLU_N8RYLvzInTWb9NHYQ',
+    appId: '1:475127308937:android:8311976322025beb1a1c58',
+    messagingSenderId: '475127308937',
+    projectId: 'fisuq-app',
+    storageBucket: 'fisuq-app.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAyo2eRQcgSmf6-cljpz14ZqDbHwX34x0A',
-    appId: '1:692144165649:ios:10f6966981e64317a0b2b0',
-    messagingSenderId: '692144165649',
-    projectId: 'eshop-multivendor',
-    storageBucket: 'eshop-multivendor.appspot.com',
-    androidClientId: '692144165649-1g138475mvblralj5bqfshev5rlh3bag.apps.googleusercontent.com',
-    iosClientId: '692144165649-snblmkb8k3eha5uc8019ncj51uk9gb0m.apps.googleusercontent.com',
-    iosBundleId: 'eshop.seller.multivendor',
+    apiKey: 'AIzaSyAfgLg9dYejhcL3SzNwMefk7Gojej_99ug',
+    appId: '1:475127308937:ios:7cc3cd60d22f9bf31a1c58',
+    messagingSenderId: '475127308937',
+    projectId: 'fisuq-app',
+    storageBucket: 'fisuq-app.appspot.com',
+    androidClientId: '475127308937-es9mabu1af5cbesoko5sov68g2nmk8de.apps.googleusercontent.com',
+    iosClientId: '475127308937-rdpchlgsp8n4o147lubggqfhh8ouseuk.apps.googleusercontent.com',
+    iosBundleId: 'com.fisuq.vendor',
   );
 }

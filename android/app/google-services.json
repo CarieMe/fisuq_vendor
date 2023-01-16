@@ -1,0 +1,134 @@
+{
+  "project_info": {
+    "project_number": "475127308937",
+    "project_id": "fisuq-app",
+    "storage_bucket": "fisuq-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475127308937:android:c2991cdf403117e91a1c58",
+        "android_client_info": {
+          "package_name": "com.fisuq.del"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "475127308937-es9mabu1af5cbesoko5sov68g2nmk8de.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fisuq.del",
+            "certificate_hash": "af65eb1165f3ecf0c7cfeb2439f6aa0149395256"
+          }
+        },
+        {
+          "client_id": "475127308937-ejkd0048vbbn7je9voc8e42rj9349082.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBS5k2QsaQhi5RLU_N8RYLvzInTWb9NHYQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "475127308937-ejkd0048vbbn7je9voc8e42rj9349082.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "475127308937-7nv7alc1difvkn5k71is2k5etv21ctan.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.fisuq.customerios"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475127308937:android:ef56c503a5a472e21a1c58",
+        "android_client_info": {
+          "package_name": "com.fisuq.user"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "475127308937-uv5ss6rgm0artq24qv66dtm0bsshlgn2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fisuq.user",
+            "certificate_hash": "af65eb1165f3ecf0c7cfeb2439f6aa0149395256"
+          }
+        },
+        {
+          "client_id": "475127308937-ejkd0048vbbn7je9voc8e42rj9349082.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBS5k2QsaQhi5RLU_N8RYLvzInTWb9NHYQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "475127308937-ejkd0048vbbn7je9voc8e42rj9349082.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "475127308937-7nv7alc1difvkn5k71is2k5etv21ctan.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.fisuq.customerios"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475127308937:android:8311976322025beb1a1c58",
+        "android_client_info": {
+          "package_name": "com.fisuq.vendor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "475127308937-ejkd0048vbbn7je9voc8e42rj9349082.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBS5k2QsaQhi5RLU_N8RYLvzInTWb9NHYQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "475127308937-ejkd0048vbbn7je9voc8e42rj9349082.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "475127308937-7nv7alc1difvkn5k71is2k5etv21ctan.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.fisuq.customerios"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

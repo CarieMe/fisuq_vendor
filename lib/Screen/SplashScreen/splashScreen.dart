@@ -2,13 +2,13 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:sellermultivendor/Widget/parameterString.dart';
+import 'package:fisuq_vendor/Widget/parameterString.dart';
 import '../../Provider/settingProvider.dart';
 import '../../Widget/desing.dart';
 import '../../Widget/sharedPreferances.dart';
 import '../../Widget/systemChromeSettings.dart';
 import '../Authentication/Login.dart';
-import '../DeshBord/dashboard.dart'; 
+import '../DeshBord/dashboard.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);

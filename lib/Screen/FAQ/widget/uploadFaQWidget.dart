@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sellermultivendor/Screen/FAQ/faq.dart';
-import 'package:sellermultivendor/Widget/snackbar.dart';
+import 'package:fisuq_vendor/Screen/FAQ/faq.dart';
+import 'package:fisuq_vendor/Widget/snackbar.dart';
 import '../../../Helper/Color.dart';
 import '../../../Helper/Constant.dart';
 import '../../../Widget/validation.dart';

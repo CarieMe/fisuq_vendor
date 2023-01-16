@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sellermultivendor/Provider/settingProvider.dart';
+import 'package:fisuq_vendor/Provider/settingProvider.dart';
 import '../Model/FAQModel/Faqs_Model.dart';
 import '../Repository/faqRepositry.dart';
 import '../Widget/networkAvailablity.dart';

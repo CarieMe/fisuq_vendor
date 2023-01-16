@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //============================ Selected Pin codes Type =========================
 import 'package:flutter/material.dart';
-import 'package:sellermultivendor/Screen/AddProduct/Add_Product.dart';
+import 'package:fisuq_vendor/Screen/AddProduct/Add_Product.dart';
 import '../../../../Helper/Color.dart';
 import '../../../../Helper/Constant.dart';
 import '../../../../Widget/routes.dart';

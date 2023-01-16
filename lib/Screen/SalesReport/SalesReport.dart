@@ -2,9 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:sellermultivendor/Helper/Color.dart';
-import 'package:sellermultivendor/Screen/SalesReport/widget/ListIteam.dart';
-import 'package:sellermultivendor/Screen/SalesReport/widget/genetalDataShower.dart';
+import 'package:fisuq_vendor/Helper/Color.dart';
+import 'package:fisuq_vendor/Screen/SalesReport/widget/ListIteam.dart';
+import 'package:fisuq_vendor/Screen/SalesReport/widget/genetalDataShower.dart';
 import '../../Provider/salesReportProvider.dart';
 import '../../Provider/settingProvider.dart';
 import '../../Widget/appBar.dart';
@@ -198,7 +198,7 @@ class _SalesReportState extends State<SalesReport>
                         .getSalesReportRequest(context, setStateNow, false);
                   },
                 );
-               },
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: primary,
                 foregroundColor: Colors.white,

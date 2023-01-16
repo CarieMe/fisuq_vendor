@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sellermultivendor/Screen/AddProduct/Widget/getCommonSwitch.dart';
+import 'package:fisuq_vendor/Screen/AddProduct/Widget/getCommonSwitch.dart';
 import '../../../../../../Helper/Color.dart';
 import '../../../../../../Helper/Constant.dart';
 import '../../../../../../Widget/validation.dart';

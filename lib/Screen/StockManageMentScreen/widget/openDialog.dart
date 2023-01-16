@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sellermultivendor/Helper/Color.dart';
-import 'package:sellermultivendor/Provider/settingProvider.dart';
-import 'package:sellermultivendor/Widget/ButtonDesing.dart';
-import 'package:sellermultivendor/Widget/validation.dart';
+import 'package:fisuq_vendor/Helper/Color.dart';
+import 'package:fisuq_vendor/Provider/settingProvider.dart';
+import 'package:fisuq_vendor/Widget/ButtonDesing.dart';
+import 'package:fisuq_vendor/Widget/validation.dart';
 import '../../../../Helper/Constant.dart';
 import '../StockManageMentList.dart';
 

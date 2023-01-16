@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:sellermultivendor/Widget/parameterString.dart';
+import 'package:fisuq_vendor/Widget/parameterString.dart';
 import 'AttachmentModel.dart';
 import 'OrderItemsModel.dart';
 

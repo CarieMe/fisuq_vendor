@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:sellermultivendor/Widget/validation.dart';
+import 'package:fisuq_vendor/Widget/validation.dart';
 import '../Helper/Color.dart';
 import 'parameterString.dart';
 

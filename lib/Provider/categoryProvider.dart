@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sellermultivendor/Provider/settingProvider.dart';
+import 'package:fisuq_vendor/Provider/settingProvider.dart';
 import '../Model/CategoryModel/categoryModel.dart';
 import '../Repository/categoryRepositry.dart';
 import '../Screen/AddProduct/Add_Product.dart';

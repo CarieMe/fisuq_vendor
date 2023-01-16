@@ -1,4 +1,4 @@
-import 'package:sellermultivendor/Widget/parameterString.dart';
+import 'package:fisuq_vendor/Widget/parameterString.dart';
 
 class SalesReportModel {
   String? id,

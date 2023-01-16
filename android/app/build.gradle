@@ -53,7 +53,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "wrteam.seller.multivendor"
+        applicationId "com.fisuq.vendor"
         minSdkVersion 21
         targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()

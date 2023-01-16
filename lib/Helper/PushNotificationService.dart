@@ -3,7 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
-import 'package:sellermultivendor/Helper/ApiBaseHelper.dart';
+import 'package:fisuq_vendor/Helper/ApiBaseHelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Provider/settingProvider.dart';
 import '../Widget/api.dart';
@@ -33,7 +33,6 @@ class PushNotificationService {
   Future initialise() async {
     iOSPermission();
     messaging.getToken().then(
-
       (token) async {
         print("token firebase****$token");
         if (context.read<SettingProvider>().CUR_USERID != null &&

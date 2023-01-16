@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sellermultivendor/Provider/settingProvider.dart';
+import 'package:fisuq_vendor/Provider/settingProvider.dart';
 import '../Helper/Color.dart';
 import '../Helper/Constant.dart';
 import '../Model/OrdersModel/OrderModel.dart';

@@ -1,4 +1,4 @@
-import 'package:sellermultivendor/Widget/parameterString.dart';
+import 'package:fisuq_vendor/Widget/parameterString.dart';
 
 class Attribute {
   String? id, value, name, sType, sValue;
@@ -12,7 +12,7 @@ class Attribute {
   });
 
   factory Attribute.fromJson(Map<String, dynamic> json) {
-    return  Attribute(
+    return Attribute(
       id: json[IDS],
       value: json[VALUE],
       name: json[AttrName],

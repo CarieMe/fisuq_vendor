@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:sellermultivendor/Screen/ReviewList/widget/reviewImageIndexWidget.dart';
-import 'package:sellermultivendor/Screen/ReviewList/widget/reviewImageWidget.dart';
-import 'package:sellermultivendor/Widget/validation.dart';
+import 'package:fisuq_vendor/Screen/ReviewList/widget/reviewImageIndexWidget.dart';
+import 'package:fisuq_vendor/Screen/ReviewList/widget/reviewImageWidget.dart';
+import 'package:fisuq_vendor/Widget/validation.dart';
 import '../../../Helper/Color.dart';
 import '../../../Helper/Constant.dart';
 import '../../../Widget/appBar.dart';

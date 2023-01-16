@@ -2,7 +2,7 @@
 //=================================== Made In ==================================
 
 import 'package:flutter/material.dart';
-import 'package:sellermultivendor/Widget/desing.dart';
+import 'package:fisuq_vendor/Widget/desing.dart';
 import '../../../../Helper/Color.dart';
 import '../../../../Helper/Constant.dart';
 import '../../../../Widget/validation.dart';

@@ -1,4 +1,4 @@
-import 'package:sellermultivendor/Widget/parameterString.dart';
+import 'package:fisuq_vendor/Widget/parameterString.dart';
 
 class Product_Varient {
   String? id,
@@ -15,7 +15,7 @@ class Product_Varient {
       stockType,
       sku,
       stockStatus = '1';
- 
+
   List<String>? images;
   List<String>? imagesUrl;
   List<String>? imageRelativePath;

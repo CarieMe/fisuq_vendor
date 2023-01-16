@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mime/mime.dart';
 import 'package:provider/provider.dart';
-import 'package:sellermultivendor/Provider/settingProvider.dart';
+import 'package:fisuq_vendor/Provider/settingProvider.dart';
 import '../Helper/Constant.dart';
 import '../Model/MediaModel/MediaModel.dart';
 import '../Repository/mediaRepositry.dart';

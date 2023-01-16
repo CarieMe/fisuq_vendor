@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sellermultivendor/Provider/settingProvider.dart';
-import 'package:sellermultivendor/Screen/ReviewList/widget/ReviewBodyWidget.dart';
-import 'package:sellermultivendor/Widget/validation.dart';
+import 'package:fisuq_vendor/Provider/settingProvider.dart';
+import 'package:fisuq_vendor/Screen/ReviewList/widget/ReviewBodyWidget.dart';
+import 'package:fisuq_vendor/Widget/validation.dart';
 import '../../Provider/reviewListProvider.dart';
 import '../../Widget/appBar.dart';
 import '../../Model/ProductModel/Product.dart';

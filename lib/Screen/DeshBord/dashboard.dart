@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:flutter_svg/svg.dart';
-import 'package:sellermultivendor/Screen/DeshBord/profileagain.dart';
-import 'package:sellermultivendor/Widget/validation.dart';
+import 'package:fisuq_vendor/Screen/DeshBord/profileagain.dart';
+import 'package:fisuq_vendor/Widget/validation.dart';
 import '../../Helper/Color.dart';
 import '../../Helper/Constant.dart';
 import '../../Widget/desing.dart';

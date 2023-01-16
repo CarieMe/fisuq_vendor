@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sellermultivendor/Helper/Color.dart';
-import 'package:sellermultivendor/Screen/StockManageMentScreen/widget/openDialog.dart';
+import 'package:fisuq_vendor/Helper/Color.dart';
+import 'package:fisuq_vendor/Screen/StockManageMentScreen/widget/openDialog.dart';
 import '../../Helper/Constant.dart';
 import '../../Model/ProductModel/Product.dart';
 import '../../Provider/settingProvider.dart';

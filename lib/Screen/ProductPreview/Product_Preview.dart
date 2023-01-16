@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:sellermultivendor/Screen/ProductPreview/widget/selectedPhoto.dart';
+import 'package:fisuq_vendor/Screen/ProductPreview/widget/selectedPhoto.dart';
 import '../../Helper/Color.dart';
 import '../../Helper/Constant.dart';
 import '../../Widget/desing.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sellermultivendor/Widget/validation.dart';
+import 'package:fisuq_vendor/Widget/validation.dart';
 import '../Helper/Color.dart';
 import 'ButtonDesing.dart';
 import 'desing.dart';

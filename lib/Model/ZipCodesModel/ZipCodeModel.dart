@@ -1,4 +1,4 @@
-import 'package:sellermultivendor/Widget/parameterString.dart';
+import 'package:fisuq_vendor/Widget/parameterString.dart';
 
 class ZipCodeModel {
   String? id,
@@ -19,7 +19,7 @@ class ZipCodeModel {
   });
 
   factory ZipCodeModel.fromJson(Map<String, dynamic> json) {
-    return  ZipCodeModel(
+    return ZipCodeModel(
       id: json[Id],
       zipcode: json[Zipcode],
       dateCreated: json[DateCreated],

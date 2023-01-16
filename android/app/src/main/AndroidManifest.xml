@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="wrteam.seller.multivendor">
+    package="com.fisuq.vendor">
  <queries>
     <intent>
       <action android:name="android.intent.action.SENDTO" />
@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <application
         android:icon="@mipmap/ic_launcher"
-        android:label="eShop Seller"
+        android:label="Fisuq Vendor"
         android:usesCleartextTraffic="true">
     
          <activity

@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:provider/provider.dart';
-import 'package:sellermultivendor/Helper/Color.dart';
+import 'package:fisuq_vendor/Helper/Color.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../Helper/ApiBaseHelper.dart';
 import '../../Helper/Constant.dart';

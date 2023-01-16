@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sellermultivendor/Provider/settingProvider.dart';
+import 'package:fisuq_vendor/Provider/settingProvider.dart';
 import '../Model/Attribute Models/AttributeModel/AttributesModel.dart';
 import '../Model/Attribute Models/AttributeSetModel/AttributeSetModel.dart';
 import '../Model/Attribute Models/AttributeValueModel/AttributeValue.dart';

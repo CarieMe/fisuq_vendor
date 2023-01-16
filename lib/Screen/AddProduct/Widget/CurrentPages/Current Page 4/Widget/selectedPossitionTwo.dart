@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sellermultivendor/Screen/AddProduct/Widget/CurrentPages/Current%20Page%204/Widget/variantProductSpecialPrice.dart';
-import 'package:sellermultivendor/Screen/AddProduct/Widget/CurrentPages/Current%20Page%204/Widget/varintProductPrice.dart';
+import 'package:fisuq_vendor/Screen/AddProduct/Widget/CurrentPages/Current%20Page%204/Widget/variantProductSpecialPrice.dart';
+import 'package:fisuq_vendor/Screen/AddProduct/Widget/CurrentPages/Current%20Page%204/Widget/varintProductPrice.dart';
 import '../../../../../../Helper/Color.dart';
 import '../../../../../../Helper/Constant.dart';
 import '../../../../../../Provider/settingProvider.dart';

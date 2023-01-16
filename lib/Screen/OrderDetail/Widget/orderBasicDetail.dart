@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sellermultivendor/Helper/Constant.dart';
+import 'package:fisuq_vendor/Helper/Constant.dart';
 import '../../../Helper/Color.dart';
 import '../../../Model/OrdersModel/OrderModel.dart';
 import '../../../Widget/validation.dart';

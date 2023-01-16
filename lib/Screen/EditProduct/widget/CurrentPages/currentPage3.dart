@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:sellermultivendor/Screen/EditProduct/widget/getCommannWidget.dart';
-import 'package:sellermultivendor/Screen/EditProduct/widget/getIconSelectionDesingWidget.dart';
-import 'package:sellermultivendor/Screen/EditProduct/widget/getCommonButton.dart';
+import 'package:fisuq_vendor/Screen/EditProduct/widget/getCommannWidget.dart';
+import 'package:fisuq_vendor/Screen/EditProduct/widget/getIconSelectionDesingWidget.dart';
+import 'package:fisuq_vendor/Screen/EditProduct/widget/getCommonButton.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../Helper/Color.dart';
 import '../../../../Helper/Constant.dart';

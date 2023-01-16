@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:sellermultivendor/Helper/Color.dart';
+import 'package:fisuq_vendor/Helper/Color.dart';
 import '../../Helper/Constant.dart';
 import '../../Model/OrdersModel/OrderModel.dart';
 import '../../Provider/orderListProvider.dart';

@@ -1,21 +1,21 @@
 // add your constant file's
 
 //Your application title
-const String title = 'eShop Multi-Vendor - Seller';
+const String title = 'Fisuq Vendor';
 
 //Your application name
-const String appName = 'Seller App eShop';
+const String appName = 'Fisuq Vendor';
 
 //Your package name
 const String packageName = 'wrteam.seller.multivendor';
 const String iosPackage = 'wrteam.seller.multivendor';
 
 //Set country code
-String defaultCountryCode = 'IN';
+String defaultCountryCode = 'AE';
 
 //Add your secret key here to conncet app with admin panel .
-const String baseUrl = 'Add_Your_Base_URL_Here';
-const String jwtKey = 'Add_Your_Jwtkey_here';
+const String baseUrl = 'https://fisuq.com/seller/app/v1/api/';
+const String jwtKey = '026151a7cd76bfc3393171a269f14b194c1310ec';
 
 //Time settings
 const int timeOut = 50;

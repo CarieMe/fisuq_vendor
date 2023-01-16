@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
-import 'package:sellermultivendor/Helper/Color.dart';
+import 'package:fisuq_vendor/Helper/Color.dart';
 import '../../Helper/Constant.dart';
 import '../../Model/RattingModel/Ratting.dart';
 import '../../Widget/desing.dart';

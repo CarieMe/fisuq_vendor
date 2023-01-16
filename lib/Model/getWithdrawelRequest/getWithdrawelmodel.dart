@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:sellermultivendor/Widget/parameterString.dart';
+import 'package:fisuq_vendor/Widget/parameterString.dart';
 
 class GetWithdrawelReq {
   String? id,

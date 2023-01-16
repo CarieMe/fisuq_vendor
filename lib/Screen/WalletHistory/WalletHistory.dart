@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sellermultivendor/Helper/ApiBaseHelper.dart';
-import 'package:sellermultivendor/Helper/Color.dart';
-import 'package:sellermultivendor/Helper/Constant.dart';
-import 'package:sellermultivendor/Widget/parameterString.dart';
+import 'package:fisuq_vendor/Helper/ApiBaseHelper.dart';
+import 'package:fisuq_vendor/Helper/Color.dart';
+import 'package:fisuq_vendor/Helper/Constant.dart';
+import 'package:fisuq_vendor/Widget/parameterString.dart';
 import '../../Model/getWithdrawelRequest/getWithdrawelmodel.dart';
 import '../../Provider/settingProvider.dart';
 import '../../Provider/walletProvider.dart';

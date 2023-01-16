@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:sellermultivendor/Widget/validation.dart';
+import 'package:fisuq_vendor/Widget/validation.dart';
 import '../../Helper/Color.dart';
 import '../../Widget/appBar.dart';
 import '../Profile/Profile.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 const MaterialColor primary_app = MaterialColor(
-  0xffFE7E7B,
+  0xff4DB9C4,
   <int, Color>{
     50: primary,
     100: primary,
@@ -15,12 +15,12 @@ const MaterialColor primary_app = MaterialColor(
     900: primary,
   },
 );
-const Color primary = Color(0xffFC6A57);
+const Color primary = Color(0xff4DB9C4);
 const Color secondary = Color(0xffFDC994);
 const Color newPrimary = Color(0xffff6a63);
 const Color fontColor = Color(0xff4543C1);
-const Color grad1Color = Color(0xffFFBD69);
-const Color grad2Color = Color(0xffFF6363);
+const Color grad1Color = Color(0xff5CC2A4);
+const Color grad2Color = Color(0xff4DB9C4);
 const Color pink = Color(0xffd4001d);
 const Color red = Colors.red;
 const Color grey = Color(0xff808080);

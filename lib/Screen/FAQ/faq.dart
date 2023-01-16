@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sellermultivendor/Screen/FAQ/widget/getFaQIteams.dart';
+import 'package:fisuq_vendor/Screen/FAQ/widget/getFaQIteams.dart';
 import '../../Helper/Color.dart';
 import '../../Helper/Constant.dart';
 import '../../Provider/faqProvider.dart';

@@ -2,12 +2,12 @@ import 'dart:async';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sellermultivendor/Helper/ApiBaseHelper.dart';
-import 'package:sellermultivendor/Helper/Color.dart';
-import 'package:sellermultivendor/Helper/Constant.dart';
-import 'package:sellermultivendor/Widget/desing.dart';
-import 'package:sellermultivendor/Widget/parameterString.dart';
-import 'package:sellermultivendor/Localization/Language_Constant.dart';
+import 'package:fisuq_vendor/Helper/ApiBaseHelper.dart';
+import 'package:fisuq_vendor/Helper/Color.dart';
+import 'package:fisuq_vendor/Helper/Constant.dart';
+import 'package:fisuq_vendor/Widget/desing.dart';
+import 'package:fisuq_vendor/Widget/parameterString.dart';
+import 'package:fisuq_vendor/Localization/Language_Constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../Helper/PushNotificationService.dart';
 import '../../Model/OrdersModel/OrderModel.dart';
@@ -30,6 +30,7 @@ import 'Widget/Charts/weekDataChart.dart';
 import 'Widget/appMaintanceDialog.dart';
 import 'Widget/boxesDesingHome.dart';
 import 'Widget/randomColorWidget.dart';
+
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 

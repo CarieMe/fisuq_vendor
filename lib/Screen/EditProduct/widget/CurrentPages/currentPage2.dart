@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sellermultivendor/Screen/EditProduct/widget/getCommannWidget.dart';
-import 'package:sellermultivendor/Screen/EditProduct/widget/getCommonSwitch.dart';
-import 'package:sellermultivendor/Screen/EditProduct/widget/getIconSelectionDesingWidget.dart';
+import 'package:fisuq_vendor/Screen/EditProduct/widget/getCommannWidget.dart';
+import 'package:fisuq_vendor/Screen/EditProduct/widget/getCommonSwitch.dart';
+import 'package:fisuq_vendor/Screen/EditProduct/widget/getIconSelectionDesingWidget.dart';
 import '../../../../Widget/validation.dart';
 import '../../EditProduct.dart';
 

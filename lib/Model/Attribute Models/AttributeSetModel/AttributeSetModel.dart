@@ -1,4 +1,4 @@
-import 'package:sellermultivendor/Widget/parameterString.dart';
+import 'package:fisuq_vendor/Widget/parameterString.dart';
 
 class AttributeSetModel {
   String? id, name, status;
@@ -10,7 +10,7 @@ class AttributeSetModel {
   });
 
   factory AttributeSetModel.fromJson(Map<String, dynamic> json) {
-    return  AttributeSetModel(
+    return AttributeSetModel(
       id: json[Id],
       name: json[Name],
       status: json[STATUS],
