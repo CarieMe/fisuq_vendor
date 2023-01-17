@@ -77,8 +77,8 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
     // //developer
     setState(
       () {
-        mobileController.text = "9988776655";
-        passwordController.text = "12345678";
+        mobileController.text = "Enter mobile number";
+        passwordController.text = "Enter password";
       },
     );
   }
@@ -504,17 +504,17 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
         fit: BoxFit.contain,
       ),
     );
-    Positioned(
-      left: (MediaQuery.of(context).size.width / 2) - 50,
-      top: (MediaQuery.of(context).size.height * 0.2) - 50,
-      child: SizedBox(
-        width: 100,
-        height: 100,
-        child: SvgPicture.asset(
-          DesignConfiguration.setSvgPath('loginlogo'),
-        ),
-      ),
-    );
+    // Positioned(
+    //   left: (MediaQuery.of(context).size.width / 2) - 50,
+    //   top: (MediaQuery.of(context).size.height * 0.2) - 50,
+    //   child: SizedBox(
+    //     width: 100,
+    //     height: 100,
+    //     child: SvgPicture.asset(
+    //       DesignConfiguration.setSvgPath('loginlogo'),
+    //     ),
+    //   ),
+    // );
   }
 
   signInSubTxt() {
@@ -539,7 +539,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
         top: 40.0,
       ),
       child: Text(
-        "Welcome to eShop Seller",
+        "Welcome vendor",
         style: Theme.of(context).textTheme.headline6!.copyWith(
               color: black,
               fontWeight: FontWeight.bold,
