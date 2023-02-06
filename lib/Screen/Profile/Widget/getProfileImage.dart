@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../Helper/Color.dart';
 import '../../../Helper/Constant.dart';
 import '../../../Widget/parameterString.dart';
-import '../Profile.dart';
+import '../profile.dart';
 
 class GetProfileImage extends StatelessWidget {
   Function update;

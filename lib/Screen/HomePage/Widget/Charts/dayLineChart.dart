@@ -2,7 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import '../../../../Helper/Color.dart';
 import '../../../../Helper/Constant.dart';
-import '../../../../Provider/homeProvider.dart';
+import '../../../../Provider/home_provider.dart';
 
 LineChartData dayData(HomeProvider value) {
   if (value.dayEarning!.isEmpty) {

@@ -7,15 +7,15 @@ const String title = 'Fisuq Vendor';
 const String appName = 'Fisuq Vendor';
 
 //Your package name
-const String packageName = 'wrteam.seller.multivendor';
-const String iosPackage = 'wrteam.seller.multivendor';
+const String packageName = 'com.fisuq.vendor';
+const String iosPackage = 'com.fisuq.vendor';
 
 //Set country code
 String defaultCountryCode = 'AE';
 
 //Add your secret key here to conncet app with admin panel .
 const String baseUrl = 'https://fisuq.com/seller/app/v1/api/';
-const String jwtKey = '026151a7cd76bfc3393171a269f14b194c1310ec';
+const String jwtKey = '5354bd0df995ec7310835400494012dbb2e687d0';
 
 //Time settings
 const int timeOut = 50;

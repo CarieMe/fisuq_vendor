@@ -242,7 +242,7 @@ addAttribute(int pos, BuildContext context, Function setState) {
               addValAttribute(
                   addProvider!.selectedAttributeValues[attributeId]!,
                   attributeValues,
-                  attributeId!,
+                  attributeId,
                   context,
                   setState);
             },

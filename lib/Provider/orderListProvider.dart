@@ -20,14 +20,14 @@ class OrderListProvider extends ChangeNotifier {
   ScrollController? scrollController;
   bool scrollLoadmore = true, scrollGettingData = false, scrollNodata = false;
   final TextEditingController controller = TextEditingController();
-  List<Order_Model> orderList = [];
+  List<OrderModel> orderList = [];
   Icon iconSearch = const Icon(
     Icons.search,
     color: primary,
     size: 25,
   );
   Widget? appBarTitle;
-  List<Order_Model> tempList = [];
+  List<OrderModel> tempList = [];
   String? activeStatus;
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
@@ -146,7 +146,7 @@ class OrderListProvider extends ChangeNotifier {
             var data = result["data"];
             if (data.length != 0) {
               tempList = (data as List)
-                  .map((data) => Order_Model.fromJson(data))
+                  .map((data) => OrderModel.fromJson(data))
                   .toList();
 
               orderList.addAll(tempList);

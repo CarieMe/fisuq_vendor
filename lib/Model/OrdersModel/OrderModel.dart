@@ -18,7 +18,7 @@ class OrderTracking {
   String? courierAgency;
   String? trackingId;
   String? url;
-  Order_Model? orderDetails;
+  OrderModel? orderDetails;
 
   factory OrderTracking.fromJson(Map<String, dynamic> json) => OrderTracking(
         id: json["id"],
@@ -28,11 +28,11 @@ class OrderTracking {
         url: json["url"],
         orderDetails: json["order_details"] == ""
             ? null
-            : Order_Model.fromJson(json["order_details"]),
+            : OrderModel.fromJson(json["order_details"]),
       );
 }
 
-class Order_Model {
+class OrderModel {
   String? id,
       name,
       mobile,
@@ -64,13 +64,15 @@ class Order_Model {
       invoice,
       delDate,
       delTime,
-      countryCode;
+      countryCode,
+      request,
+      serviceCharge;
   List<Attachment>? attachList = [];
   List<OrderItem>? itemList;
   List<String?>? listStatus = [];
   List<String?>? listDate = [];
 
-  Order_Model({
+  OrderModel({
     this.id,
     this.name,
     this.mobile,
@@ -106,9 +108,11 @@ class Order_Model {
     this.delTime,
     // this.deliveryBoyId,
     this.countryCode,
+    this.request,
+    this.serviceCharge,
   });
 
-  factory Order_Model.fromJson(Map<String, dynamic> parsedJson) {
+  factory OrderModel.fromJson(Map<String, dynamic> parsedJson) {
     List<OrderItem> itemList = [];
     var order = (parsedJson[OrderItemss] as List?);
     itemList = order!.map((data) => OrderItem.fromJson(data)).toList();
@@ -119,7 +123,7 @@ class Order_Model {
     List<String?> lStatus = [];
     List<String?> lDate = [];
 
-    return Order_Model(
+    return OrderModel(
       id: parsedJson[Id],
       name: parsedJson[Username],
       mobile: parsedJson[Mobile],
@@ -147,6 +151,8 @@ class Order_Model {
       listStatus: lStatus,
       listDate: lDate,
       otp: parsedJson[Otp],
+      request: parsedJson['notes'],
+      serviceCharge: parsedJson['requested_service'],
       latitude: parsedJson[Latitude],
       email: parsedJson['email'],
       longitude: parsedJson[Longitude],

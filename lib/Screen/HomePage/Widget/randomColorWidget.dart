@@ -1,7 +1,6 @@
 import 'dart:math';
+import 'package:fisuq_vendor/theming/text/text.dart';
 import 'package:flutter/material.dart';
-import '../../../Helper/Color.dart';
-import '../../../Helper/Constant.dart';
 
 Color generateRandomColor() {
   Random random = Random();
@@ -17,23 +16,14 @@ gethomePageTextDesing(
 ) {
   return Column(
     children: [
-      Text(numberValue,
-          style: const TextStyle(
-              color: black,
-              fontWeight: FontWeight.w400,
-              fontFamily: "Roboto",
-              fontStyle: FontStyle.normal,
-              fontSize: textFontSize14),
-          textAlign: TextAlign.left),
+      TextLM(
+        numberValue,
+      ),
       const SizedBox(height: 10),
-      Text(title,
-          style: const TextStyle(
-              color: Color(0xffff9366),
-              fontWeight: FontWeight.w400,
-              fontFamily: "Roboto",
-              fontStyle: FontStyle.normal,
-              fontSize: textFontSize12),
-          textAlign: TextAlign.left)
+      TextC(
+        title,
+        size: 14,
+      )
     ],
   );
 }

@@ -14,7 +14,8 @@ class SalesReportProvider extends ChangeNotifier {
   String totalReports = "",
       totalDeliveryCharge = "",
       grandFinalTotal = "",
-      grandTotal = "";
+      grandTotal = "",
+      totalRequestedService = "";
   bool isLoadingmore = true;
   int offset = 0;
   int total = 0;
@@ -37,6 +38,7 @@ class SalesReportProvider extends ChangeNotifier {
     isLoading = true;
     totalReports = "";
     totalDeliveryCharge = "";
+    totalRequestedService = "";
     grandFinalTotal = "";
     grandTotal = "";
     amount = null;
@@ -52,51 +54,43 @@ class SalesReportProvider extends ChangeNotifier {
     Function update,
     bool fromdate,
   ) async {
-    isNetworkAvail = await isNetworkAvailable();
-    if (isNetworkAvail) {
-      var parameter = {
-        SellerId: context.read<SettingProvider>().CUR_USERID,
-        //    OFFSET: "0",
-      };
-      if (fromdate) {
-        parameter['start_date'] = "${startDate.toLocal()}".split(' ')[0];
-        parameter['end_date'] = "${endDate.toLocal()}".split(' ')[0];
-      }
-      var result = await SalesReportRepository.getSalesReportRequest(
-        parameter: parameter,
+    var parameter = {
+      SellerId: context.read<SettingProvider>().CUR_USERID,
+    };
+    if (fromdate) {
+      parameter['start_date'] = "${startDate.toLocal()}".split(' ')[0];
+      parameter['end_date'] = "${endDate.toLocal()}".split(' ')[0];
+    }
+    var result = await SalesReportRepository.getSalesReportRequest(
+      parameter: parameter,
+    );
+
+    bool error = result["error"];
+    String msgtest = result["message"];
+
+    if (!error) {
+      totalReports = result["total"];
+      totalDeliveryCharge = result["grand_total"];
+      grandFinalTotal = result["total_delivery_charge"];
+      grandTotal = result["grand_final_total"];
+      total = int.parse(
+        result["total"],
       );
-
-      bool error = result["error"];
-      String msgtest = result["message"];
-      if (!error) {
-        totalReports = result["total"];
-        totalDeliveryCharge = result["grand_total"];
-        grandFinalTotal = result["total_delivery_charge"];
-        grandTotal = result["grand_final_total"];
-        total = int.parse(
-          result["total"],
-        );
-        if ((offset) < total) {
-          tempList.clear();
-          var data = result["rows"];
-
-          tempList = (data as List)
-              .map((data) => SalesReportModel.fromJson(data))
-              .toList();
-          tranList.addAll(tempList);
-          offset = offset + perPage;
-        }
-        isLoading = false;
-        update();
-      } else {
-        setSnackbar(msgtest, context);
-        isLoading = true;
-        update();
+      if ((offset) < total) {
+        tempList.clear();
+        var data = result["rows"];
+        tempList = (data as List)
+            .map((data) => SalesReportModel.fromJson(data))
+            .toList();
+        tranList.addAll(tempList);
+        offset = offset + perPage;
       }
+      isLoading = false;
+      update();
     } else {
-      isNetworkAvail = false;
+      setSnackbar(msgtest, context);
+      isLoading = true;
       update();
     }
-    return;
   }
 }

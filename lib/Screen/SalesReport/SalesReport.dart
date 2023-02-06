@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:fisuq_vendor/Widget/main/scaffold_main.dart';
+import 'package:fisuq_vendor/Widget/styled/button_small.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -14,10 +16,10 @@ import '../../Widget/validation.dart';
 import '../../Widget/noNetwork.dart';
 
 class SalesReport extends StatefulWidget {
-  const SalesReport({Key? key}) : super(key: key);
+  const SalesReport({super.key});
 
   @override
-  _SalesReportState createState() => _SalesReportState();
+  State<SalesReport> createState() => _SalesReportState();
 }
 
 SalesReportProvider? salesProvider;
@@ -37,7 +39,6 @@ class _SalesReportState extends State<SalesReport>
     salesProvider!.controller.addListener(_scrollListener);
     salesProvider!.buttonController = AnimationController(
         duration: const Duration(milliseconds: 2000), vsync: this);
-
     salesProvider!.buttonSqueezeanimation = Tween(
       begin: width * 0.7,
       end: 50.0,
@@ -141,74 +142,45 @@ class _SalesReportState extends State<SalesReport>
 
   _filterRow() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 5.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width * .375,
-            height: 30,
-            child: ElevatedButton(
-              onPressed: () => _startDate(context),
-              style: ElevatedButton.styleFrom(
-                side: const BorderSide(color: primary),
-                backgroundColor: primary,
-                foregroundColor: Colors.white,
-                disabledForegroundColor: Colors.grey,
-              ),
-              child: Text(
-                salesProvider!.start == null
-                    ? getTranslated(context, "Start Date")!
-                    : salesProvider!.start!,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
+          Expanded(
+            flex: 2,
+            child: ButtonSmall(
+                data: getTranslated(context, "Start Date")!,
+                onPressed: () {
+                  _startDate(context);
+                }),
           ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width * .375,
-            height: 30,
-            child: ElevatedButton(
-              onPressed: () => _endDate(context),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: primary,
-                foregroundColor: Colors.white,
-                disabledForegroundColor: Colors.grey,
-              ),
-              child: Text(
-                salesProvider!.end == null
-                    ? getTranslated(context, "End Date")!
-                    : salesProvider!.end!,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
+          const SizedBox(width: 5),
+          Expanded(
+            flex: 2,
+            child: ButtonSmall(
+                data: getTranslated(context, "End Date")!,
+                onPressed: () {
+                  _endDate(context);
+                }),
           ),
-          SizedBox(
-            height: 30,
-            width: 40,
-            child: ElevatedButton(
-              onPressed: () {
-                setState(
-                  () {
-                    salesProvider!.start = null;
-                    salesProvider!.end = null;
-                    salesProvider!.startDate = DateTime.now();
-                    salesProvider!.endDate = DateTime.now();
-                    salesProvider!.initializaedVariableWithDefualtValue();
-                    salesProvider!
-                        .getSalesReportRequest(context, setStateNow, false);
-                  },
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: primary,
-                foregroundColor: Colors.white,
-                disabledForegroundColor: Colors.grey,
-                padding: const EdgeInsets.all(0),
-              ),
-              child: const Center(
-                child: Icon(Icons.close),
-              ),
-            ),
+          const SizedBox(width: 5),
+          Expanded(
+            flex: 1,
+            child: ButtonSmall(
+                data: 'Refresh',
+                onPressed: () {
+                  setState(
+                    () {
+                      salesProvider!.start = null;
+                      salesProvider!.end = null;
+                      salesProvider!.startDate = DateTime.now();
+                      salesProvider!.endDate = DateTime.now();
+                      salesProvider!.initializaedVariableWithDefualtValue();
+                      salesProvider!
+                          .getSalesReportRequest(context, setStateNow, false);
+                    },
+                  );
+                }),
           ),
         ],
       ),
@@ -219,8 +191,9 @@ class _SalesReportState extends State<SalesReport>
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      backgroundColor: lightWhite,
+    return MainScaffold(
+      title: getTranslated(context, 'Sales Report')!,
+      isBottom: false,
       body: isNetworkAvail
           ? salesProvider!.isLoading
               ? const ShimmerEffect()
@@ -231,11 +204,10 @@ class _SalesReportState extends State<SalesReport>
                     controller: salesProvider!.controller,
                     child: Column(
                       children: [
-                        GradientAppBar(
-                          getTranslated(context, 'Sales Report')!,
-                        ),
                         const GetGeneralDataShower(),
+                        const SizedBox(height: 10),
                         _filterRow(),
+                        const SizedBox(height: 10),
                         salesProvider!.tranList.isEmpty
                             ? Center(
                                 child: Text(

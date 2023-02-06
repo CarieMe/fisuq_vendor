@@ -19,8 +19,7 @@ class ApiException implements Exception {
 class ApiBaseHelper {
   Future<dynamic> postAPICall(Uri url, Map parameter) async {
     var responseJson;
-    print("parameter : $parameter");
-    print("url : $url");
+
     try {
       final response = await post(
         url,
@@ -31,10 +30,7 @@ class ApiBaseHelper {
           seconds: timeOut,
         ),
       );
-      print("response : ${response.body.toString()}");
 
-      print(
-          "Parameter = $parameter , API = $url,response : ${response.body.toString()}");
       responseJson = _response(response);
     } on SocketException {
       throw FetchDataException('No Internet connection');

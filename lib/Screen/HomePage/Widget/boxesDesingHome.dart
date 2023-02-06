@@ -1,15 +1,14 @@
-import 'dart:math';
-
+import 'package:fisuq_vendor/theming/colors/app_colors.dart';
+import 'package:fisuq_vendor/theming/helper/const_corners.dart';
+import 'package:fisuq_vendor/theming/text/text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import '../../../Helper/Color.dart';
-import '../../../Helper/Constant.dart';
 import '../../../Provider/walletProvider.dart';
 import '../../../Widget/desing.dart';
 import '../../../Widget/routes.dart';
-import '../../ProductList/ProductList.dart';
+import '../../ProductList/product_list.dart';
 import '../../WalletHistory/WalletHistory.dart';
 
 boxesDesingHome(
@@ -63,62 +62,34 @@ boxesDesingHome(
           start: index == 1 || index == 3 ? 7.5 : 0.0,
         ),
         child: Container(
-          decoration: const BoxDecoration(
-            borderRadius:
-                BorderRadius.all(Radius.circular(circularBorderRadius15)),
-            color: white,
-            boxShadow: [
-              BoxShadow(
-                color: blarColor,
-                offset: Offset(0, 0),
-                blurRadius: 4,
-                spreadRadius: 0,
-              ),
-            ],
+          decoration: BoxDecoration(
+            borderRadius: Corners.cornerMd,
+            border: Border.all(
+              color: Theme.of(context).indicatorColor.withOpacity(0.1),
+              width: .5,
+            ),
+            color: Theme.of(context).canvasColor,
           ),
           height: 141,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsetsDirectional.only(
-                    top: 18.0, bottom: 15.0, start: 18.0),
-                child: SvgPicture.asset(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 15, 0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SvgPicture.asset(
                   DesignConfiguration.setSvgPath(svg),
-                  width: 30,
-                  height: 30,
+                  color: AppColor.primary.withOpacity(0.7),
+                  width: 40,
+                  height: 40,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsetsDirectional.only(
-                  start: 18.0,
-                  bottom: 10.0,
+                const SizedBox(height: 10),
+                TextLL(
+                  numberCounting ?? "",
                 ),
-                child: Text(title,
-                    style: const TextStyle(
-                        color: black,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: "PlusJakartaSans",
-                        fontStyle: FontStyle.normal,
-                        fontSize: textFontSize14),
-                    textAlign: TextAlign.left),
-              ),
-              Padding(
-                padding: const EdgeInsetsDirectional.only(
-                  start: 18.0,
-                  bottom: 10.0,
-                ),
-                child: Text(numberCounting ?? "",
-                    style: const TextStyle(
-                        color: black,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: "PlusJakartaSans",
-                        fontStyle: FontStyle.normal,
-                        fontSize: textFontSize16),
-                    textAlign: TextAlign.left),
-              )
-            ],
+                TextBS(title),
+              ],
+            ),
           ),
         ),
       ),

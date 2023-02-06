@@ -2,7 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import '../../../../Helper/Color.dart';
 import '../../../../Helper/Constant.dart';
-import '../../../../Provider/homeProvider.dart';
+import '../../../../Provider/home_provider.dart';
 
 LineChartData monthData(HomeProvider val) {
   if (val.monthEarning!.isEmpty) {

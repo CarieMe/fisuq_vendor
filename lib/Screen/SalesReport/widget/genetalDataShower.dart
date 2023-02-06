@@ -1,7 +1,6 @@
+import 'package:fisuq_vendor/Widget/styled/neuro_containder.dart';
 import 'package:flutter/material.dart';
 import 'package:fisuq_vendor/Widget/validation.dart';
-import '../../../Helper/Color.dart';
-import '../../../Helper/Constant.dart';
 import '../SalesReport.dart';
 import 'getRowFields.dart';
 
@@ -13,23 +12,10 @@ class GetGeneralDataShower extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(
         top: 10.0,
-        left: 15,
-        right: 15,
+        left: 5,
+        right: 5,
       ),
-      child: Container(
-        decoration: const BoxDecoration(
-          borderRadius:
-              BorderRadius.all(Radius.circular(circularBorderRadius5)),
-          boxShadow: [
-            BoxShadow(
-              color: blarColor,
-              offset: Offset(0, 0),
-              blurRadius: 4,
-              spreadRadius: 0,
-            ),
-          ],
-          color: white,
-        ),
+      child: NeuContainer(
         child: Padding(
           padding: const EdgeInsets.all(18.0),
           child: Column(
@@ -50,6 +36,11 @@ class GetGeneralDataShower extends StatelessWidget {
                 value: salesProvider!.grandFinalTotal,
                 simple: false,
               ),
+              GetRowFields(
+                title: getTranslated(context, "ServiceCharge")!,
+                value: serviceCharge(),
+                simple: false,
+              ),
               const Divider(),
               GetRowFields(
                 title: getTranslated(context, "Grand Final Total :")!,
@@ -61,5 +52,14 @@ class GetGeneralDataShower extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String serviceCharge() {
+    var grandtotal = double.parse(salesProvider!.grandTotal);
+    var delivery = double.parse(salesProvider!.grandFinalTotal);
+    var total = double.parse(salesProvider!.totalDeliveryCharge);
+    var services = (grandtotal - total) - delivery;
+    var service = services.toString();
+    return service;
   }
 }

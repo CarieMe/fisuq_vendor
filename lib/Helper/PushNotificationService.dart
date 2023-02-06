@@ -34,7 +34,6 @@ class PushNotificationService {
     iOSPermission();
     messaging.getToken().then(
       (token) async {
-        print("token firebase****$token");
         if (context.read<SettingProvider>().CUR_USERID != null &&
             context.read<SettingProvider>().CUR_USERID != "")
           _registerToken(token);

@@ -11,8 +11,8 @@ class ShimmerEffect extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
       child: Shimmer.fromColors(
-        baseColor: Colors.grey[300]!,
-        highlightColor: Colors.grey[100]!,
+        baseColor: Theme.of(context).backgroundColor,
+        highlightColor: Theme.of(context).canvasColor,
         child: SingleChildScrollView(
           child: Column(
             children: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]

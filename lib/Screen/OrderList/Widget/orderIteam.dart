@@ -1,7 +1,8 @@
-import 'package:flutter/cupertino.dart';
+import 'package:fisuq_vendor/Widget/main/scale_route.dart';
+import 'package:fisuq_vendor/Widget/styled/neuro_containder.dart';
+import 'package:fisuq_vendor/theming/colors/app_colors.dart';
+import 'package:fisuq_vendor/theming/text/text.dart';
 import 'package:flutter/material.dart';
-import '../../../Helper/Color.dart';
-import '../../../Helper/Constant.dart';
 import '../../../Model/OrdersModel/OrderModel.dart';
 import '../../../Widget/desing.dart';
 import '../../../Widget/parameterString.dart';
@@ -10,9 +11,9 @@ import '../../OrderDetail/OrderDetail.dart';
 import '../OrderList.dart';
 
 class OrderIteam extends StatelessWidget {
-  int index;
-  Function update;
-  OrderIteam({
+  final int index;
+  final Function update;
+  const OrderIteam({
     Key? key,
     required this.index,
     required this.update,
@@ -20,249 +21,148 @@ class OrderIteam extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Order_Model model = orderListProvider!.orderList[index];
+    OrderModel model = orderListProvider!.orderList[index];
     Color back;
-
     if ((model.itemList![0].activeStatus!) == DELIVERD) {
-      back = Colors.green;
+      back = AppColor.green;
     } else if ((model.itemList![0].activeStatus!) == SHIPED) {
-      back = Colors.orange;
+      back = AppColor.orange;
     } else if ((model.itemList![0].activeStatus!) == CANCLED ||
         model.itemList![0].activeStatus! == RETURNED) {
-      back = red;
+      back = AppColor.red;
     } else if ((model.itemList![0].activeStatus!) == PROCESSED) {
-      back = Colors.indigo;
+      back = AppColor.purple;
     } else if ((model.itemList![0].activeStatus!) == PROCESSED) {
-      back = Colors.indigo;
+      back = AppColor.purple;
     } else if (model.itemList![0].activeStatus! == "awaiting") {
-      back = Colors.black;
+      back = AppColor.gray;
     } else {
-      back = Colors.cyan;
+      back = Colors.teal;
     }
     return Padding(
-      padding: const EdgeInsets.only(top: 12.0),
-      child: Container(
-        decoration: const BoxDecoration(
-          borderRadius:
-              BorderRadius.all(Radius.circular(circularBorderRadius5)),
-          boxShadow: [
-            BoxShadow(
-              color: blarColor,
-              offset: Offset(0, 0),
-              blurRadius: 4,
-              spreadRadius: 0,
-            ),
-          ],
-          color: white,
-        ),
+      padding: const EdgeInsets.only(bottom: 15.0),
+      child: NeuContainer(
         child: InkWell(
-          borderRadius: BorderRadius.circular(circularBorderRadius5),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsetsDirectional.only(
-                  top: 08.0,
-                  start: 21,
-                  end: 12,
-                  bottom: 00,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        Text(
-                          "${getTranslated(context, "Order_No")!}.",
-                          style: const TextStyle(
-                              color: grey, fontSize: textFontSize14),
-                        ),
-                        Text(
-                          model.id!,
-                          style: const TextStyle(color: black),
-                        ),
-                      ],
-                    ),
-                    const Spacer(),
-                    Container(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  flex: 0,
+                  child: RotatedBox(
+                    quarterTurns: 3,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.35,
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 2),
+                          horizontal: 0, vertical: 6),
                       decoration: BoxDecoration(
                         color: back,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(
-                            circularBorderRadius5,
-                          ),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(8),
+                          topRight: Radius.circular(8),
                         ),
                       ),
-                      child: Text(
-                        () {
-                          if (StringValidation.capitalize(
-                                  model.itemList![0].activeStatus!) ==
-                              "Received") {
-                            return getTranslated(context, "RECEIVED_LBL")!;
-                          } else if (StringValidation.capitalize(
-                                  model.itemList![0].activeStatus!) ==
-                              "Processed") {
-                            return getTranslated(context, "PROCESSED_LBL")!;
-                          } else if (StringValidation.capitalize(
-                                  model.itemList![0].activeStatus!) ==
-                              "Shipped") {
-                            return getTranslated(context, "SHIPED_LBL")!;
-                          } else if (StringValidation.capitalize(
-                                  model.itemList![0].activeStatus!) ==
-                              "Delivered") {
-                            return getTranslated(context, "DELIVERED_LBL")!;
-                          } else if (StringValidation.capitalize(
-                                  model.itemList![0].activeStatus!) ==
-                              "Awaiting") {
-                            return getTranslated(context, "AWAITING_LBL")!;
-                          } else if (StringValidation.capitalize(
-                                  model.itemList![0].activeStatus!) ==
-                              "Cancelled") {
-                            return getTranslated(context, "CANCELLED_LBL")!;
-                          } else if (StringValidation.capitalize(
-                                  model.itemList![0].activeStatus!) ==
-                              "Returned") {
-                            return getTranslated(context, "RETURNED_LBL")!;
-                          } else {
-                            return StringValidation.capitalize(
-                                model.itemList![0].activeStatus!);
-                          }
-                        }(),
-                        style: const TextStyle(color: white),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              const Divider(),
-              Padding(
-                padding: const EdgeInsets.only(
-                    right: 21.0, left: 21.0, bottom: 10, top: 5),
-                child: Row(
-                  children: [
-                    Flexible(
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.person,
-                            size: 20,
-                            color: black,
-                          ),
-                          const SizedBox(width: 08),
-                          Expanded(
-                            child: Text(
-                              model.name != null && model.name!.isNotEmpty
-                                  ? " ${StringValidation.capitalize(model.name!)}"
-                                  : " ",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(color: black),
-                            ),
-                          ),
-                        ],
+                      child: Center(
+                        child: TextBT(
+                          () {
+                            if (StringValidation.capitalize(
+                                    model.itemList![0].activeStatus!) ==
+                                "Received") {
+                              return getTranslated(context, "RECEIVED_LBL")!;
+                            } else if (StringValidation.capitalize(
+                                    model.itemList![0].activeStatus!) ==
+                                "Processed") {
+                              return getTranslated(context, "PROCESSED_LBL")!;
+                            } else if (StringValidation.capitalize(
+                                    model.itemList![0].activeStatus!) ==
+                                "Shipped") {
+                              return getTranslated(context, "SHIPED_LBL")!;
+                            } else if (StringValidation.capitalize(
+                                    model.itemList![0].activeStatus!) ==
+                                "Delivered") {
+                              return getTranslated(context, "DELIVERED_LBL")!;
+                            } else if (StringValidation.capitalize(
+                                    model.itemList![0].activeStatus!) ==
+                                "Awaiting") {
+                              return getTranslated(context, "AWAITING_LBL")!;
+                            } else if (StringValidation.capitalize(
+                                    model.itemList![0].activeStatus!) ==
+                                "Cancelled") {
+                              return getTranslated(context, "CANCELLED_LBL")!;
+                            } else if (StringValidation.capitalize(
+                                    model.itemList![0].activeStatus!) ==
+                                "Returned") {
+                              return getTranslated(context, "RETURNED_LBL")!;
+                            } else {
+                              return StringValidation.capitalize(
+                                  model.itemList![0].activeStatus!);
+                            }
+                          }(),
+                        ),
                       ),
                     ),
-                    InkWell(
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.call,
-                            size: 20,
-                            color: black,
-                          ),
-                          const SizedBox(width: 08),
-                          Text(
-                            " ${model.mobile!}",
-                            style: const TextStyle(
-                                color: black,
-                                decoration: TextDecoration.underline),
-                          ),
-                        ],
-                      ),
-                      onTap: () {},
-                    )
-                  ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.only(right: 21.0, left: 21.0, bottom: 10),
-                child: Row(
-                  children: [
-                    Row(
+                Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
                       children: [
-                        const Icon(
-                          Icons.money,
-                          size: 20,
-                          color: black,
+                        OTL(
+                          label: model.name != null && model.name!.isNotEmpty
+                              ? StringValidation.capitalize(model.name!)
+                              : " ",
+                          icon: Icons.person,
+                          title: 'Customer',
                         ),
-                        const SizedBox(width: 08),
-                        Row(
-                          children: [
-                            Text(
-                              " ${getTranslated(context, "PayableTXT")!}: ",
-                              style: const TextStyle(color: grey),
-                            ),
-                            Text(
-                              " ${DesignConfiguration.getPriceFormat(context, double.parse(model.payable!))!}",
-                              style: const TextStyle(color: black),
-                            ),
-                          ],
+                        OTL(
+                          label: " ${model.mobile!}",
+                          icon: Icons.call,
+                          title: 'Contact',
+                        ),
+                        OTL(
+                          label: model.orderDate!,
+                          icon: Icons.calendar_month,
+                          title: "Date",
                         ),
                       ],
                     ),
-                    const Spacer(),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.payment,
-                          size: 20,
-                          color: black,
-                        ),
-                        const SizedBox(width: 08),
-                        Text(
-                          " ${model.payMethod!}",
-                        ),
-                      ],
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.only(right: 21.0, left: 21.0, bottom: 10),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.date_range,
-                      size: 20,
-                      color: black,
-                    ),
-                    const SizedBox(width: 08),
-                    Row(
-                      children: [
-                        Text(
-                          " ${getTranslated(context, "ORDER_DATE")!}: ",
-                          style: const TextStyle(color: grey),
-                        ),
-                        Text(
-                          model.orderDate!,
-                          style: const TextStyle(color: black),
-                        ),
-                      ],
-                    ),
-                  ],
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    children: [
+                      OTL(
+                        label: model.id!,
+                        icon: Icons.note,
+                        title: getTranslated(context, "Order_No")!,
+                      ),
+                      OTL(
+                        label: DesignConfiguration.getPriceFormat(
+                            context, double.parse(getTotalAmount(model)))!,
+                        icon: Icons.money,
+                        title: getTranslated(context, "PayableTXT")!,
+                      ),
+                      OTL(
+                        label: model.payMethod!,
+                        icon: Icons.payment,
+                        title: 'Payment',
+                      ),
+                    ],
+                  ),
                 ),
-              )
-            ],
+              ],
+            ),
           ),
           onTap: () async {
             await Navigator.push(
               context,
-              CupertinoPageRoute(
-                builder: (context) => OrderDetail(
+              ScaleRoute(
+                page: OrderDetail(
                   id: model.id,
                 ),
               ),
@@ -274,6 +174,56 @@ class OrderIteam extends StatelessWidget {
             );
           },
         ),
+      ),
+    );
+  }
+
+  String getTotalAmount(OrderModel model) {
+    var total = double.parse(model.total!);
+    var extra = double.parse(model.serviceCharge!);
+    var amount = total + extra;
+    var payable = amount.toStringAsFixed(2);
+    return payable;
+  }
+}
+
+class OTL extends StatelessWidget {
+  final String label;
+  final String title;
+  final IconData icon;
+  const OTL({
+    super.key,
+    required this.label,
+    required this.icon,
+    required this.title,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 0,
+            child: Icon(
+              icon,
+              size: 20,
+              color: AppColor.rate2.withOpacity(0.8),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            flex: 1,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextBL(label),
+                TextI(title, size: 12),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

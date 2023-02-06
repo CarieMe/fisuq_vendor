@@ -6,7 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:fisuq_vendor/Widget/validation.dart';
 import '../../Helper/Color.dart';
 import '../../Widget/appBar.dart';
-import '../Profile/Profile.dart';
+import '../Profile/profile.dart';
 
 class MapScreen extends StatefulWidget {
   final double? latitude, longitude;

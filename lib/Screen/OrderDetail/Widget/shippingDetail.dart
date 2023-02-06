@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:fisuq_vendor/Widget/styled/neuro_containder.dart';
+import 'package:fisuq_vendor/theming/text/text.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../Helper/Color.dart';
@@ -8,8 +10,8 @@ import '../../../Widget/validation.dart';
 import '../../HomePage/home.dart';
 
 class ShippingDetail extends StatelessWidget {
-  List<Order_Model> tempList;
-  ShippingDetail({
+  final List<OrderModel> tempList;
+  const ShippingDetail({
     Key? key,
     required this.tempList,
   }) : super(key: key);
@@ -25,46 +27,91 @@ class ShippingDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 10.0),
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        decoration: const BoxDecoration(
-          borderRadius:
-              BorderRadius.all(Radius.circular(circularBorderRadius5)),
-          color: white,
-          boxShadow: [
-            BoxShadow(
-                color: blarColor,
-                offset: Offset(0, 0),
-                blurRadius: 4,
-                spreadRadius: 0),
-          ],
-        ),
+      padding: const EdgeInsets.only(top: 5.0),
+      child: NeuContainer(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              TextIB(
+                data: getTranslated(context, "SHIPPING_DETAIL")!,
+                size: 16,
+              ),
+              Divider(color: Theme.of(context).indicatorColor),
+              TextBL(
+                tempList[0].orderRecipientPerson != null &&
+                        tempList[0].orderRecipientPerson!.isNotEmpty
+                    ? StringValidation.capitalize(
+                        tempList[0].orderRecipientPerson!)
+                    : " ",
+              ),
+              TextI(
+                () {
+                  return tempList[0].address != null ||
+                          tempList[0].address != ""
+                      ? StringValidation.capitalize(tempList[0].address!)
+                      : "";
+                }(),
+                size: 16,
+              ),
+              const SizedBox(height: 10),
               Row(
                 children: [
-                  Text(
-                    getTranslated(context, "SHIPPING_DETAIL")!,
-                    style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                        color: primary,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: "PlusJakartaSans",
-                        fontStyle: FontStyle.normal,
-                        fontSize: textFontSize13),
+                  Expanded(
+                    flex: 1,
+                    child: customerViewPermission
+                        ? InkWell(
+                            onTap: _launchCaller,
+                            child: NeuContainer(
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(
+                                      Icons.call,
+                                      size: 15,
+                                      color: primary,
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    TextC(
+                                      tempList[0].mobile!,
+                                      size: 16,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(),
                   ),
-                  const Spacer(),
-                  SizedBox(
-                    height: 30,
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.location_on,
-                        color: primary,
+                  const SizedBox(width: 15),
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      child: NeuContainer(
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Icon(
+                                Icons.map,
+                                size: 15,
+                                color: primary,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              TextC('View Map', size: 16),
+                            ],
+                          ),
+                        ),
                       ),
-                      onPressed: () async {
+                      onTap: () async {
                         var url = '';
                         if (Platform.isAndroid) {
                           url =
@@ -79,69 +126,9 @@ class ShippingDetail extends StatelessWidget {
                         );
                       },
                     ),
-                  )
+                  ),
                 ],
               ),
-              const Divider(
-                color: grey3,
-              ),
-              Text(
-                tempList[0].orderRecipientPerson != null &&
-                        tempList[0].orderRecipientPerson!.isNotEmpty
-                    ? StringValidation.capitalize(
-                        tempList[0].orderRecipientPerson!)
-                    : " ",
-                style: const TextStyle(
-                  color: black,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: "PlusJakartaSans",
-                  fontStyle: FontStyle.normal,
-                  fontSize: textFontSize13,
-                ),
-              ),
-              Text(
-                () {
-                  return tempList[0].address != null ||
-                          tempList[0].address != ""
-                      ? StringValidation.capitalize(tempList[0].address!)
-                      : "";
-                }(),
-                style: const TextStyle(
-                  fontFamily: 'PlusJakartaSans',
-                  color: grey3,
-                  fontSize: textFontSize13,
-                  fontWeight: FontWeight.w400,
-                  fontStyle: FontStyle.normal,
-                ),
-              ),
-              customerViewPermission
-                  ? InkWell(
-                      onTap: _launchCaller,
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.call,
-                            size: 15,
-                            color: primary,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            tempList[0].mobile!,
-                            style: const TextStyle(
-                              color: primary,
-                              fontFamily: 'PlusJakartaSans',
-                              fontSize: textFontSize13,
-                              fontWeight: FontWeight.w400,
-                              fontStyle: FontStyle.normal,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  : Container(),
             ],
           ),
         ),

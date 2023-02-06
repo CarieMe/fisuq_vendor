@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../Helper/Color.dart';
@@ -12,7 +11,6 @@ import '../../Widget/desing.dart';
 import '../../Widget/networkAvailablity.dart';
 import '../../Widget/routes.dart';
 import '../../Widget/validation.dart';
-import '../../Widget/noNetwork.dart';
 import 'Widget/getFirstHeader.dart';
 import 'Widget/getFourthHeader.dart';
 import 'Widget/getProfileImage.dart';
@@ -20,14 +18,16 @@ import 'Widget/getSecondHeader.dart';
 import 'Widget/getThirdHeader.dart';
 
 class Profile extends StatefulWidget {
+  const Profile({super.key});
+
   @override
-  State<StatefulWidget> createState() => StateProfile();
+  State<Profile> createState() => _ProfileState();
 }
 
 String? lat, long;
 ProfileProvider? profileProvider;
 
-class StateProfile extends State<Profile> with TickerProviderStateMixin {
+class _ProfileState extends State<Profile> with TickerProviderStateMixin {
   setStateNow() {
     setState(() {});
   }
@@ -96,37 +96,6 @@ class StateProfile extends State<Profile> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  Future<void> _playAnimation() async {
-    try {
-      await profileProvider!.buttonController!.forward();
-    } on TickerCanceled {}
-  }
-
-  setStateNoInternate() async {
-    _playAnimation();
-
-    Future.delayed(
-      const Duration(seconds: 2),
-    ).then(
-      (_) async {
-        isNetworkAvail = await isNetworkAvailable();
-        if (isNetworkAvail) {
-          Navigator.pushReplacement(
-            context,
-            CupertinoPageRoute(
-              builder: (BuildContext context) => super.widget,
-            ),
-          );
-        } else {
-          await profileProvider!.buttonController!.reverse();
-          setState(
-            () {},
-          );
-        }
-      },
-    );
-  }
-
 //==============================================================================
 //========================== build Method ======================================
 
@@ -135,27 +104,29 @@ class StateProfile extends State<Profile> with TickerProviderStateMixin {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     return Scaffold(
-        key: profileProvider!.scaffoldKey,
-        backgroundColor: lightWhite,
-        body: Stack(
-          children: <Widget>[
-            bodyPart(),
-            DesignConfiguration.showCircularProgress(
-              profileProvider!.isLoading,
-              primary,
-            )
-          ],
-        ),
-        bottomNavigationBar: AppBtn(
-          title: getTranslated(context, "Update Profile")!,
-          btnAnim: profileProvider!.buttonSqueezeanimation,
-          btnCntrl: profileProvider!.buttonController,
-          paddingRequired: true,
-          onBtnSelected: () async {
-            _playAnimation();
-            checkNetwork();
-          },
-        ));
+      key: profileProvider!.scaffoldKey,
+      backgroundColor: lightWhite,
+      body: Stack(
+        children: <Widget>[
+          bodyPart(),
+          DesignConfiguration.showCircularProgress(
+            profileProvider!.isLoading,
+            primary,
+          )
+        ],
+      ),
+    );
+
+    // bottomNavigationBar: AppBtn(
+    //   title: getTranslated(context, "Update Profile")!,
+    //   btnAnim: profileProvider!.buttonSqueezeanimation,
+    //   btnCntrl: profileProvider!.buttonController,
+    //   paddingRequired: true,
+    //   onBtnSelected: () async {
+    //     _playAnimation();
+    //     checkNetwork();
+    //   },
+    // ));
   }
 
 //==============================================================================
@@ -173,24 +144,17 @@ class StateProfile extends State<Profile> with TickerProviderStateMixin {
                 horizontal: 10,
                 vertical: 10,
               ),
-              child: isNetworkAvail
-                  ? Column(
-                      children: <Widget>[
-                        GetProfileImage(update: setStateNow),
-                        GetFirstHeader(setStateNow: setStateNow),
-                        GetSecondHeader(setStateNow: setStateNow),
-                        GetThirdHeader(setStateNow: setStateNow),
-                        GetFurthHeader(setStateNow: setStateNow),
-                        changePass(),
-                        // updateBtn(),
-                      ],
-                    )
-                  : noInternet(
-                      context,
-                      setStateNoInternate,
-                      profileProvider!.buttonSqueezeanimation,
-                      profileProvider!.buttonController,
-                    ),
+              child: Column(
+                children: <Widget>[
+                  GetProfileImage(update: setStateNow),
+                  GetFirstHeader(setStateNow: setStateNow),
+                  GetSecondHeader(setStateNow: setStateNow),
+                  GetThirdHeader(setStateNow: setStateNow),
+                  GetFurthHeader(setStateNow: setStateNow),
+                  changePass(),
+                  // updateBtn(),
+                ],
+              ),
             ),
           ),
         ),
@@ -473,7 +437,6 @@ class StateProfile extends State<Profile> with TickerProviderStateMixin {
       btnAnim: profileProvider!.buttonSqueezeanimation,
       btnCntrl: profileProvider!.buttonController,
       onBtnSelected: () async {
-        _playAnimation();
         checkNetwork();
       },
     );

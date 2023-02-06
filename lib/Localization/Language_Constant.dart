@@ -58,5 +58,5 @@ Locale _locale(String languageCode) {
 void changeLanguage(BuildContext context, String language) async {
   languageFlag = language;
   Locale loc = await setLocale(language);
-  MyApp.setLocale(context, loc);
+  FisuqVendor.setLocale(context, loc);
 }

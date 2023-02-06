@@ -21,8 +21,8 @@ import '../../../main.dart';
 import '../../AddProduct/Add_Product.dart';
 import '../../Authentication/Login.dart';
 import '../../OrderList/OrderList.dart';
-import '../../ProductList/ProductList.dart';
-import '../../Profile/Profile.dart';
+import '../../ProductList/product_list.dart';
+import '../../Profile/profile.dart';
 import '../../StockManageMentScreen/StockManageMentList.dart';
 import '../../TermFeed/policys.dart';
 import '../../WalletHistory/WalletHistory.dart';
@@ -767,7 +767,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   void _changeLan(String language, BuildContext ctx) async {
     Locale locale = await setLocale(language);
 
-    MyApp.setLocale(ctx, locale);
+    FisuqVendor.setLocale(ctx, locale);
   }
 
   Future<void> deleteAccountAPI(String mobile) async {

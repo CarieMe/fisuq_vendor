@@ -2,8 +2,12 @@ import 'dart:io';
 import 'package:country_code_picker/country_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:fisuq_vendor/Provider/theme.dart';
+import 'package:fisuq_vendor/theming/theme.dart';
+import 'package:fisuq_vendor/tools/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -11,7 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:fisuq_vendor/Provider/faqProvider.dart';
 import 'package:fisuq_vendor/firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'Helper/Color.dart';
+
 import 'Helper/Constant.dart';
 import 'Helper/PushNotificationService.dart';
 import 'Localization/Demo_Localization.dart';
@@ -23,7 +27,7 @@ import 'Provider/attributeSetProvider.dart';
 import 'Provider/categoryProvider.dart';
 import 'Provider/countryProvider.dart';
 import 'Provider/editProductProvider.dart';
-import 'Provider/homeProvider.dart';
+import 'Provider/home_provider.dart';
 import 'Provider/loginProvider.dart';
 import 'Provider/mediaProvider.dart';
 import 'Provider/orderListProvider.dart';
@@ -36,7 +40,7 @@ import 'Provider/stockmanagementProvider.dart';
 import 'Provider/taxProvider.dart';
 import 'Provider/walletProvider.dart';
 import 'Provider/zipcodeProvider.dart';
-import 'Screen/SplashScreen/splashScreen.dart';
+import 'Screen/SplashScreen/splash_screen.dart';
 
 late AndroidNotificationChannel channel;
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
@@ -53,6 +57,12 @@ class MyHttpOverrides extends HttpOverrides {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Colors.transparent,
+    ),
+  );
   if (Firebase.apps.isNotEmpty) {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
@@ -60,10 +70,11 @@ void main() async {
   } else {
     await Firebase.initializeApp();
   }
-
   HttpOverrides.global = MyHttpOverrides();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   FirebaseMessaging.onBackgroundMessage(myForgroundMessageHandler);
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
   if (!kIsWeb) {
     channel = const AndroidNotificationChannel(
       'high_importance_channel', // id
@@ -76,21 +87,45 @@ void main() async {
             AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
   }
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider<ThemeNotifier>(
+      create: (BuildContext context) {
+        String? theme = prefs.getString(appTheme);
+        if (theme == dark) {
+          isDarkTheme = 'true';
+        } else if (theme == light) {
+          isDarkTheme = 'false';
+        }
+        if (theme == null || theme == '' || theme == systemDefault) {
+          prefs.setString(appTheme, systemDefault);
+          var brightness = SchedulerBinding.instance.window.platformBrightness;
+          isDarkTheme = (brightness == Brightness.dark).toString();
+          return ThemeNotifier(ThemeMode.system);
+        }
+        return ThemeNotifier(theme == light ? ThemeMode.light : ThemeMode.dark);
+      },
+      child: FisuqVendor(sharedPreferences: prefs),
+    ),
+  );
 }
 
-class MyApp extends StatefulWidget {
-  late SharedPreferences sharedPreferences;
+class FisuqVendor extends StatefulWidget {
+  late SharedPreferences? sharedPreferences;
+  FisuqVendor({
+    super.key,
+    this.sharedPreferences,
+  });
   static void setLocale(BuildContext context, Locale newLocale) {
-    _MyAppState state = context.findAncestorStateOfType<_MyAppState>()!;
+    _FisuqVendorState state =
+        context.findAncestorStateOfType<_FisuqVendorState>()!;
     state.setLocale(newLocale);
   }
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<FisuqVendor> createState() => _FisuqVendorState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _FisuqVendorState extends State<FisuqVendor> {
   Locale? _locale;
 
   setLocale(Locale locale) {
@@ -121,8 +156,11 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<ThemeProvider>(
+            create: (context) => ThemeProvider()),
         ChangeNotifierProvider<HomeProvider>(
             create: (context) => HomeProvider()),
         ChangeNotifierProvider<AddProductProvider>(
@@ -166,11 +204,6 @@ class _MyAppState extends State<MyApp> {
       ],
       child: MaterialApp(
         title: title,
-        theme: ThemeData(
-          primarySwatch: primary_app,
-          fontFamily: 'opensans',
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
         locale: _locale,
         localizationsDelegates: const [
           CountryLocalizations.delegate,
@@ -180,14 +213,11 @@ class _MyAppState extends State<MyApp> {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: const [
-          Locale("en", "US"),
-          Locale("zh", "CN"),
-          Locale("es", "ES"),
-          Locale("hi", "IN"),
-          Locale("ar", "DZ"),
-          Locale("ru", "RU"),
-          Locale("ja", "JP"),
-          Locale("de", "DE")
+          Locale('en', 'US'),
+          Locale('ar', 'DZ'),
+          Locale('hi', 'IN'),
+          Locale('zh', 'CN'),
+          Locale('ru', 'RU'),
         ],
         localeResolutionCallback: (locale, supportedLocales) {
           for (var supportedLocale in supportedLocales) {
@@ -200,6 +230,11 @@ class _MyAppState extends State<MyApp> {
         },
         debugShowCheckedModeBanner: false,
         home: const SplashScreen(),
+        theme: themeNotifier.getThemeMode() == ThemeMode.dark
+            ? darkTheme
+            : lightTheme,
+        darkTheme: darkTheme,
+        themeMode: themeNotifier.getThemeMode(),
       ),
     );
   }

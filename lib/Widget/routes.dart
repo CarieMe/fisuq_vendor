@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import '../Screen/AddProduct/Add_Product.dart';
 import '../Screen/Authentication/SellerRegistration.dart';
 import '../Screen/OrderList/OrderList.dart';
-import '../Screen/Profile/Profile.dart';
+import '../Screen/Profile/profile.dart';
 import '../Screen/SalesReport/SalesReport.dart';
 import '../Screen/Serach/Search.dart';
 import '../main.dart';
@@ -19,7 +19,7 @@ class Routes {
     Navigator.push(
       context,
       CupertinoPageRoute(
-        builder: (context) => MyApp(),
+        builder: (context) => FisuqVendor(),
       ),
     );
   }

@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../Helper/Color.dart';
 import '../../../Provider/walletProvider.dart';
 import '../../../Widget/routes.dart';
-import '../../ProductList/ProductList.dart';
+import '../../ProductList/product_list.dart';
 import '../../WalletHistory/WalletHistory.dart';
 
 commanDesingButtons(
@@ -36,9 +36,9 @@ commanDesingButtons(
           Navigator.push(
             context,
             CupertinoPageRoute(
-              builder: (context) =>  ProductList(
+              builder: (context) => ProductList(
                 flag: '',
-                   fromNavbar: false,
+                fromNavbar: false,
               ),
             ),
           );

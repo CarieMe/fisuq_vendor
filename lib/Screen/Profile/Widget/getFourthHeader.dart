@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../Helper/Constant.dart';
 import '../../../Widget/validation.dart';
-import '../Profile.dart';
+import '../profile.dart';
 import 'commanDesingFields.dart';
 
 class GetFurthHeader extends StatelessWidget {

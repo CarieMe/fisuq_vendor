@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:fisuq_vendor/Widget/validation.dart';
@@ -66,10 +67,23 @@ class DesignConfiguration {
         ),
       );
     }
-    return const SizedBox(
-      height: 0.0,
-      width: 0.0,
-    );
+    return const SizedBox.shrink();
+  }
+
+  static Widget showLoader(
+    bool isProgress,
+    BuildContext context,
+  ) {
+    if (isProgress) {
+      return Center(
+        child: CupertinoActivityIndicator(
+          animating: true,
+          color: Theme.of(context).indicatorColor,
+          radius: 20,
+        ),
+      );
+    }
+    return const SizedBox.shrink();
   }
 
 // Container Decoration

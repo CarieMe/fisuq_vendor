@@ -2158,7 +2158,7 @@ class _EditProductState extends State<EditProduct>
                 addValAttribute(
                     editProvider!.selectedAttributeValues[attributeId]!,
                     attributeValues,
-                    attributeId!);
+                    attributeId);
               },
               child: Container(
                 width: width,

@@ -2,19 +2,16 @@ import '../Helper/ApiBaseHelper.dart';
 import '../Widget/api.dart';
 
 class OrderListRepository {
-
-  static Future<Map<String, dynamic>> getOrders(
-    {
+  static Future<Map<String, dynamic>> getOrders({
     var parameter,
-  }
-  ) async {
+  }) async {
     try {
-     var taxDetail =
+      var taxDetail =
           await ApiBaseHelper().postAPICall(getOrdersApi, parameter);
 
       return taxDetail;
     } on Exception catch (e) {
-      throw ApiException('Something went wrong');
+      throw ApiException('Something went wrong $e');
     }
   }
 }

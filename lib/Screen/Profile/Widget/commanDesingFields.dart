@@ -1,3 +1,4 @@
+import 'package:fisuq_vendor/theming/text/text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -6,7 +7,7 @@ import '../../../Helper/Constant.dart';
 import '../../../Widget/routes.dart';
 import '../../../Widget/validation.dart';
 import '../../Map/map.dart';
-import '../Profile.dart';
+import '../profile.dart';
 
 class CommanDesingFields extends StatelessWidget {
   IconData? icon;
@@ -55,32 +56,15 @@ class CommanDesingFields extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  TextBS(
                     title,
-                    style: Theme.of(context).textTheme.caption!.copyWith(
-                          color: lightBlack2,
-                          fontWeight: FontWeight.normal,
-                        ),
                   ),
                   variable != "" && variable != null
-                      ? Text(
+                      ? TextBS(
                           variable!,
-                          style:
-                              Theme.of(context).textTheme.subtitle2!.copyWith(
-                                    color: lightBlack,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                          maxLines: 1,
-                          softWrap: false,
-                          overflow: TextOverflow.ellipsis,
                         )
-                      : Text(
+                      : TextBS(
                           empty,
-                          style:
-                              Theme.of(context).textTheme.subtitle2!.copyWith(
-                                    color: lightBlack,
-                                    fontWeight: FontWeight.bold,
-                                  ),
                         ),
                 ],
               ),

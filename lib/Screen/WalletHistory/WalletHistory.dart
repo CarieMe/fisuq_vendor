@@ -1,4 +1,10 @@
 import 'dart:async';
+import 'package:fisuq_vendor/Widget/main/scaffold_main.dart';
+import 'package:fisuq_vendor/Widget/main/single_bottom_sheet.dart';
+import 'package:fisuq_vendor/Widget/styled/icon_main.dart';
+import 'package:fisuq_vendor/Widget/styled/neuro_containder.dart';
+import 'package:fisuq_vendor/theming/colors/app_colors.dart';
+import 'package:fisuq_vendor/theming/text/text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fisuq_vendor/Helper/ApiBaseHelper.dart';
@@ -141,54 +147,28 @@ class _WalletHistoryState extends State<WalletHistory>
         horizontal: 15.0,
         vertical: 10.0,
       ),
-      child: Container(
-        decoration: const BoxDecoration(
-          borderRadius:
-              BorderRadius.all(Radius.circular(circularBorderRadius5)),
-          boxShadow: [
-            BoxShadow(
-              color: blarColor,
-              offset: Offset(0, 0),
-              blurRadius: 4,
-              spreadRadius: 0,
-            ),
-          ],
-          color: white,
-        ),
+      child: NeuContainer(
         child: Padding(
           padding: const EdgeInsets.all(18.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              TextLL(
+                DesignConfiguration.getPriceFormat(
+                    context, double.parse(CUR_BALANCE))!,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
-                    Icons.account_balance_wallet,
-                    color: primary,
-                  ),
-                  Text(
+                  TextTL(
                     " ${getTranslated(context, "CURBAL_LBL")!}",
-                    style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                          color: grey,
-                          fontWeight: FontWeight.bold,
-                        ),
                   ),
                 ],
               ),
-              Text(
-                  DesignConfiguration.getPriceFormat(
-                      context, double.parse(CUR_BALANCE))!,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline6!
-                      .copyWith(color: black, fontWeight: FontWeight.bold)),
-              SimBtn(
-                size: 0.8,
-                title: getTranslated(context, "WITHDRAW_MONEY")!,
-                onBtnSelected: () {
-                  _showDialog();
-                },
+              const IconMain(
+                icon: 'wallet',
+                color: AppColor.secondary,
+                size: 40,
               ),
             ],
           ),
@@ -394,72 +374,65 @@ class _WalletHistoryState extends State<WalletHistory>
 
   @override
   Widget build(BuildContext context) {
-    height = MediaQuery.of(context).size.height;
-    width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      backgroundColor: lightWhite,
-      body: isNetworkAvail
-          ? Consumer<WalletTransactionProvider>(
-              builder: (context, value, child) {
-                if (value.getCurrentStatus == WalletStatus.isSuccsess) {
-                  return RefreshIndicator(
-                    key: _refreshIndicatorKey,
-                    onRefresh: _refresh,
-                    child: Column(
-                      children: [
-                        const GradientAppBar(
-                          "Wallet History",
+    return MainScaffold(
+      title: "Wallet History",
+      isBottom: true,
+      bottomSheet: SingleBottom(
+          label1: getTranslated(context, "WITHDRAW_MONEY")!,
+          function1: () {
+            _showDialog();
+          }),
+      body: Consumer<WalletTransactionProvider>(
+        builder: (context, value, child) {
+          if (value.getCurrentStatus == WalletStatus.isSuccsess) {
+            return RefreshIndicator(
+              key: _refreshIndicatorKey,
+              onRefresh: _refresh,
+              child: Column(
+                children: [
+                  getBalanceShower(),
+                  value.userTransactions.isEmpty
+                      ? Expanded(
+                          child: Center(
+                            child: Text(
+                              getTranslated(context, "noItem")!,
+                            ),
+                          ),
+                        )
+                      : MediaQuery.removePadding(
+                          context: context,
+                          removeTop: true,
+                          child: Flexible(
+                            child: ListView.builder(
+                              controller: controller,
+                              shrinkWrap: true,
+                              itemCount: (offset < total)
+                                  ? value.userTransactions.length + 1
+                                  : value.userTransactions.length,
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return (index ==
+                                            value.userTransactions.length &&
+                                        isLoadingmore)
+                                    ? const Center(
+                                        child: CircularProgressIndicator())
+                                    : ListIteamsWidget(
+                                        index: index,
+                                        tranList: value.userTransactions,
+                                      );
+                              },
+                            ),
+                          ),
                         ),
-                        getBalanceShower(),
-                        value.userTransactions.isEmpty
-                            ? Center(
-                                child: Text(
-                                  getTranslated(context, "noItem")!,
-                                ),
-                              )
-                            : MediaQuery.removePadding(
-                                context: context,
-                                removeTop: true,
-                                child: Flexible(
-                                  child: ListView.builder(
-                                    controller: controller,
-                                    shrinkWrap: true,
-                                    itemCount: (offset < total)
-                                        ? value.userTransactions.length + 1
-                                        : value.userTransactions.length,
-                                    physics:
-                                        const AlwaysScrollableScrollPhysics(),
-                                    itemBuilder: (context, index) {
-                                      return (index ==
-                                                  value.userTransactions
-                                                      .length &&
-                                              isLoadingmore)
-                                          ? const Center(
-                                              child:
-                                                  CircularProgressIndicator())
-                                          : ListIteamsWidget(
-                                              index: index,
-                                              tranList: value.userTransactions,
-                                            );
-                                    },
-                                  ),
-                                ),
-                              ),
-                      ],
-                    ),
-                  );
-                } else if (value.getCurrentStatus == WalletStatus.isFailure) {
-                  return const ShimmerEffect();
-                }
-                return const ShimmerEffect();
-              },
-            )
-          : noInternet(
-              context,
-              setStateNoInternate,
-              buttonSqueezeanimation,
-              buttonController,
-            ),
+                ],
+              ),
+            );
+          } else if (value.getCurrentStatus == WalletStatus.isFailure) {
+            return const ShimmerEffect();
+          }
+          return const ShimmerEffect();
+        },
+      ),
     );
   }
 

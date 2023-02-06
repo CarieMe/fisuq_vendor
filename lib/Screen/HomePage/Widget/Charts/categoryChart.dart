@@ -1,10 +1,12 @@
+import 'package:fisuq_vendor/Widget/styled/neuro_containder.dart';
+import 'package:fisuq_vendor/theming/colors/app_colors.dart';
+import 'package:fisuq_vendor/theming/text/text.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import '../../../../Helper/Color.dart';
 import '../../../../Helper/Constant.dart';
 import 'Indicator.dart';
-import '../../../../Provider/homeProvider.dart';
+import '../../../../Provider/home_provider.dart';
 import '../../../../Widget/validation.dart';
 import '../../home.dart';
 
@@ -26,42 +28,20 @@ catChart(
   return AspectRatio(
     aspectRatio: 1.23,
     child: Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 15,
-        vertical: 15,
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(circularBorderRadius15),
-          color: Colors.white,
-          boxShadow: const [
-            BoxShadow(
-              color: blarColor,
-              offset: Offset(0, 0),
-              blurRadius: 4,
-              spreadRadius: 0,
-            ),
-          ],
-        ),
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 50),
+      child: NeuContainer(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
+              padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
+              child: TextBL(
                 getTranslated(context, "CatWiseCount")!,
-                style: Theme.of(context)
-                    .textTheme
-                    .headline6!
-                    .copyWith(color: primary),
               ),
             ),
             Expanded(
               child: Row(
                 children: <Widget>[
-                  const SizedBox(
-                    height: 18,
-                  ),
                   Expanded(
                     flex: 2,
                     child: AspectRatio(
@@ -116,15 +96,14 @@ catChart(
                         return Indicators(
                           color: colorList[i],
                           text: val.catList![i] + " " + val.catCountList![i],
-                          textColor:
-                              touchedIndex == i ? Colors.black : Colors.grey,
+                          textColor: touchedIndex == i
+                              ? AppColor.primary
+                              : Theme.of(context).indicatorColor,
                           isSquare: true,
+                          size: 20,
                         );
                       },
                     ),
-                  ),
-                  const SizedBox(
-                    width: 28,
                   ),
                 ],
               ),

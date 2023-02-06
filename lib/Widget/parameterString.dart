@@ -1,6 +1,8 @@
 //==============================================================================
 //========================= Parameter for API's ================================
 
+// ignore_for_file: non_constant_identifier_names, constant_identifier_names
+
 import '../Helper/Constant.dart';
 
 const String isLogin = '$appName+_islogin';
@@ -137,6 +139,7 @@ const String Longitude = 'longitude';
 const String DeliveryTime = 'delivery_time';
 const String DeliveryDate = 'delivery_date';
 const String Otp = 'otp';
+const String Request = 'requested_service';
 const String Country_Code = 'country_code';
 const String IsAlreadyReturned = 'is_already_returned';
 const String IsAlreadyCancelled = 'is_already_cancelled';

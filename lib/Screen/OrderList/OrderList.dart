@@ -1,24 +1,28 @@
 import 'dart:async';
+import 'package:fisuq_vendor/Widget/main/picker.dart';
+import 'package:fisuq_vendor/Widget/main/text_field.dart';
+import 'package:fisuq_vendor/Widget/styled/button_icon.dart';
+import 'package:fisuq_vendor/Widget/styled/button_small.dart';
+import 'package:fisuq_vendor/theming/text/text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:fisuq_vendor/Helper/Color.dart';
-import '../../Helper/Constant.dart';
 import '../../Model/OrdersModel/OrderModel.dart';
 import '../../Provider/orderListProvider.dart';
 import '../../Provider/settingProvider.dart';
 import '../../Widget/desing.dart';
-import '../../Widget/networkAvailablity.dart';
-import '../../Widget/noNetwork.dart';
 import '../../Widget/systemChromeSettings.dart';
 import '../../Widget/validation.dart';
 import 'Widget/commanDesingField.dart';
 import 'Widget/orderIteam.dart';
 
 class OrderList extends StatefulWidget {
+  const OrderList({super.key});
+
   @override
-  _OrderListState createState() => _OrderListState();
+  State<OrderList> createState() => _OrderListState();
 }
 
 OrderListProvider? orderListProvider;
@@ -128,15 +132,8 @@ class _OrderListState extends State<OrderList>
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: lightWhite,
-      body: isNetworkAvail
-          ? _showContent()
-          : noInternet(
-              context,
-              setStateNoInternate,
-              orderListProvider!.buttonSqueezeanimation,
-              orderListProvider!.buttonController,
-            ),
+      backgroundColor: Theme.of(context).backgroundColor,
+      body: _showContent(),
     );
   }
 
@@ -145,30 +142,6 @@ class _OrderListState extends State<OrderList>
     setState(
       () {},
     );
-  }
-
-  Future<void> _startDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: orderListProvider!.startDate,
-        firstDate: DateTime(2020, 1),
-        lastDate: DateTime.now());
-    if (picked != null) {
-      setState(
-        () {
-          orderListProvider!.startDate = picked;
-          orderListProvider!.start =
-              DateFormat('dd-MM-yyyy').format(orderListProvider!.startDate);
-
-          if (orderListProvider!.start != null &&
-              orderListProvider!.end != null) {
-            orderListProvider!.scrollLoadmore = true;
-            orderListProvider!.scrollOffset = 0;
-            orderListProvider!.getOrder(setStateNow, context);
-          }
-        },
-      );
-    }
   }
 
   Future<void> _refresh() {
@@ -191,29 +164,6 @@ class _OrderListState extends State<OrderList>
     return orderListProvider!.getOrder(setStateNow, context);
   }
 
-  Future<void> _endDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: orderListProvider!.startDate,
-        firstDate: orderListProvider!.startDate,
-        lastDate: DateTime.now());
-    if (picked != null) {
-      setState(
-        () {
-          orderListProvider!.endDate = picked;
-          orderListProvider!.end =
-              DateFormat('dd-MM-yyyy').format(orderListProvider!.endDate);
-          if (orderListProvider!.start != null &&
-              orderListProvider!.end != null) {
-            orderListProvider!.scrollLoadmore = true;
-            orderListProvider!.scrollOffset = 0;
-            orderListProvider!.getOrder(setStateNow, context);
-          }
-        },
-      );
-    }
-  }
-
   void _handleSearchEnd() {
     if (!mounted) return;
     setState(
@@ -224,252 +174,19 @@ class _OrderListState extends State<OrderList>
     );
   }
 
-  setStateNoInternate() async {
-    _playAnimation();
-
-    Future.delayed(const Duration(seconds: 2)).then(
-      (_) async {
-        isNetworkAvail = await isNetworkAvailable();
-        if (isNetworkAvail) {
-          Navigator.pushReplacement(
-            context,
-            CupertinoPageRoute(
-              builder: (BuildContext context) => super.widget,
-            ),
-          ).then(
-            (value) {
-              setState(
-                () {},
-              );
-            },
-          );
-        } else {
-          await orderListProvider!.buttonController!.reverse();
-          if (mounted) {
-            setState(
-              () {},
-            );
-          }
-        }
-      },
-    );
-  }
-
   _showContent() {
     return NotificationListener<ScrollNotification>(
       child: Stack(
         children: [
           Column(
             children: <Widget>[
-              Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [grad1Color, grad2Color],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    stops: [0, 1],
-                    tileMode: TileMode.clamp,
-                  ),
-                ),
-                width: MediaQuery.of(context).size.width,
-                child: SafeArea(
-                  child: Column(
-                    children: [
-                      Opacity(
-                        opacity: 0.17000000178813934,
-                        child: Container(
-                          width: width * 0.9,
-                          height: 1,
-                          decoration: const BoxDecoration(
-                            color: Color(
-                              0xffffffff,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          serachIsEnable
-                              ? Padding(
-                                  padding: const EdgeInsetsDirectional.only(
-                                      start: 8.0),
-                                  child: SizedBox(
-                                    height: 60,
-                                    width: width * 0.7,
-                                    child: TextField(
-                                      controller: orderListProvider!.controller,
-                                      autofocus: true,
-                                      style: const TextStyle(
-                                        color: white,
-                                      ),
-                                      decoration: InputDecoration(
-                                        prefixIcon: const Icon(Icons.search,
-                                            color: white),
-                                        hintText:
-                                            getTranslated(context, "Search"),
-                                        hintStyle:
-                                            const TextStyle(color: white),
-                                        disabledBorder:
-                                            const UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: white,
-                                          ),
-                                        ),
-                                        enabledBorder:
-                                            const UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              : SizedBox(
-                                  height: 36,
-                                  child: Padding(
-                                    padding: const EdgeInsetsDirectional.only(
-                                      top: 7.0,
-                                      start: 15,
-                                      end: 15,
-                                    ),
-                                    child: Text(
-                                      getTranslated(context, 'Orders')!,
-                                      style: const TextStyle(
-                                        fontFamily: 'PlusJakartaSans',
-                                        color: Color(0xffffffff),
-                                        fontSize: textFontSize16,
-                                        fontWeight: FontWeight.w400,
-                                        fontStyle: FontStyle.normal,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsetsDirectional.only(
-                                  start: 15,
-                                  end: 15,
-                                ),
-                                child: InkWell(
-                                  onTap: () {
-                                    if (!mounted) return;
-                                    setState(
-                                      () {
-                                        if (serachIsEnable == false) {
-                                          serachIsEnable = true;
-                                          _handleSearchStart();
-                                        } else {
-                                          _handleSearchEnd();
-                                        }
-                                      },
-                                    );
-                                  },
-                                  child: Icon(
-                                    serachIsEnable ? Icons.close : Icons.search,
-                                    color: white,
-                                    size: 18,
-                                  ),
-                                ),
-                              ),
-                              Material(
-                                color: Colors.transparent,
-                                child: PopupMenuButton(
-                                  icon: const Icon(
-                                    Icons.more_vert,
-                                    color: Colors.white,
-                                    size: 18,
-                                  ),
-                                  onSelected: (dynamic value) {
-                                    switch (value) {
-                                      case 0:
-                                        return () {
-                                          orderListProvider!
-                                              .currentSelectedOrderType = '';
-                                          _refresh();
-                                        }();
-                                      case 1:
-                                        return () {
-                                          orderListProvider!
-                                                  .currentSelectedOrderType =
-                                              'simple';
-                                          _refresh();
-                                        }();
-                                      case 2:
-                                        return () {
-                                          orderListProvider!
-                                                  .currentSelectedOrderType =
-                                              'digital';
-                                          _refresh();
-                                        }();
-                                    }
-                                  },
-                                  itemBuilder: (BuildContext context) =>
-                                      <PopupMenuEntry>[
-                                    const PopupMenuItem(
-                                      value: 0,
-                                      child: ListTile(
-                                        dense: true,
-                                        contentPadding:
-                                            EdgeInsetsDirectional.only(
-                                                start: 0.0, end: 0.0),
-                                        leading: Icon(
-                                          Icons.format_align_justify,
-                                          color: primary,
-                                          size: 25,
-                                        ),
-                                        title: Text("All"),
-                                      ),
-                                    ),
-                                    const PopupMenuItem(
-                                      value: 1,
-                                      child: ListTile(
-                                        dense: true,
-                                        contentPadding:
-                                            EdgeInsetsDirectional.only(
-                                                start: 0.0, end: 0.0),
-                                        leading: Icon(
-                                          Icons.redeem,
-                                          color: primary,
-                                          size: 25,
-                                        ),
-                                        title: Text("Simple"),
-                                      ),
-                                    ),
-                                    const PopupMenuItem(
-                                      value: 2,
-                                      child: ListTile(
-                                        dense: true,
-                                        contentPadding:
-                                            EdgeInsetsDirectional.only(
-                                                start: 0.0, end: 0.0),
-                                        leading: Icon(
-                                          Icons.memory,
-                                          color: primary,
-                                          size: 20,
-                                        ),
-                                        title: Text("Digital"),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              buildAppbar(),
               Padding(
                 padding: const EdgeInsets.only(
-                    top: 10.0, bottom: 20, left: 10, right: 10),
+                    top: 20.0, bottom: 20, left: 5, right: 0),
                 child: SizedBox(
                   width: width,
-                  height: 70,
+                  height: 80,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
@@ -510,7 +227,7 @@ class _OrderListState extends State<OrderList>
                       ),
                       CommanDesingWidget(
                         title: getTranslated(context, "CANCELLED_LBL")!,
-                        icon: Icons.cancel,
+                        icon: Icons.delete,
                         index: 5,
                         onTapAction: orderListProvider!.statusList[5],
                         update: setStateNow,
@@ -526,7 +243,9 @@ class _OrderListState extends State<OrderList>
                   ),
                 ),
               ),
+              const SizedBox(height: 0),
               _filterRow(),
+              const SizedBox(height: 20),
               orderListProvider!.scrollNodata
                   ? SizedBox(
                       height: height * 0.5,
@@ -542,11 +261,11 @@ class _OrderListState extends State<OrderList>
                             shrinkWrap: true,
                             controller: orderListProvider!.scrollController,
                             padding: const EdgeInsetsDirectional.only(
-                                start: 15, end: 15),
+                                start: 10, end: 10),
                             physics: const AlwaysScrollableScrollPhysics(),
                             itemCount: orderListProvider!.orderList.length,
                             itemBuilder: (context, index) {
-                              Order_Model? item;
+                              OrderModel? item;
                               try {
                                 item = orderListProvider!.orderList.isEmpty
                                     ? null
@@ -562,7 +281,6 @@ class _OrderListState extends State<OrderList>
                                       .getOrder(setStateNow, context);
                                 }
                               } on Exception catch (_) {}
-
                               return item == null
                                   ? Container()
                                   : MediaQuery.removePadding(
@@ -581,10 +299,148 @@ class _OrderListState extends State<OrderList>
             ],
           ),
           orderListProvider!.scrollGettingData
-              ? const Center(
-                  child: CircularProgressIndicator(),
+              ? Center(
+                  child: CupertinoActivityIndicator(
+                    animating: true,
+                    color: Theme.of(context).indicatorColor,
+                    radius: 20,
+                  ),
                 )
               : Container(),
+        ],
+      ),
+    );
+  }
+
+  Widget buildAppbar() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 56, 10, 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            flex: 1,
+            child: serachIsEnable
+                ? TextFild(
+                    controller: orderListProvider!.controller,
+                    hintText: getTranslated(context, "Search"),
+                    autofocus: true,
+                  )
+                : TextLL(
+                    getTranslated(context, 'Orders')!,
+                  ),
+          ),
+          const SizedBox(width: 20),
+          Expanded(
+            flex: 0,
+            child: ButtonIcon(
+              onPressed: () {
+                if (!mounted) return;
+                setState(
+                  () {
+                    if (serachIsEnable == false) {
+                      serachIsEnable = true;
+                      _handleSearchStart();
+                    } else {
+                      _handleSearchEnd();
+                    }
+                  },
+                );
+              },
+              data: Icon(
+                serachIsEnable
+                    ? CupertinoIcons.multiply_circle_fill
+                    : CupertinoIcons.search,
+                size: 24,
+              ),
+            ),
+          ),
+          // Row(
+          //   children: [
+          //     Padding(
+          //       padding: const EdgeInsetsDirectional.only(
+          //         start: 15,
+          //         end: 15,
+          //       ),
+
+          // PopupMenuButton(
+          //   color: Theme.of(context).canvasColor,
+          //   shape: const RoundedRectangleBorder(
+          //     borderRadius: BorderRadius.all(
+          //       Radius.circular(10),
+          //     ),
+          //   ),
+          //   icon: const Icon(
+          //     Icons.more_vert,
+          //     color: AppColor.primary,
+          //     size: 24,
+          //   ),
+          //   onSelected: (dynamic value) {
+          //     switch (value) {
+          //       case 0:
+          //         return () {
+          //           orderListProvider!.currentSelectedOrderType = '';
+          //           _refresh();
+          //         }();
+          //       case 1:
+          //         return () {
+          //           orderListProvider!.currentSelectedOrderType = 'simple';
+          //           _refresh();
+          //         }();
+          //       case 2:
+          //         return () {
+          //           orderListProvider!.currentSelectedOrderType = 'digital';
+          //           _refresh();
+          //         }();
+          //     }
+          //   },
+          //   itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+          //     const PopupMenuItem(
+          //       value: 0,
+          //       child: ListTile(
+          //         dense: true,
+          //         contentPadding:
+          //             EdgeInsetsDirectional.only(start: 0.0, end: 0.0),
+          //         leading: Icon(
+          //           Icons.format_align_justify,
+          //           color: primary,
+          //           size: 25,
+          //         ),
+          //         title: TextBS("All"),
+          //       ),
+          //     ),
+          //     const PopupMenuItem(
+          //       value: 1,
+          //       child: ListTile(
+          //         dense: true,
+          //         contentPadding:
+          //             EdgeInsetsDirectional.only(start: 0.0, end: 0.0),
+          //         leading: Icon(
+          //           Icons.redeem,
+          //           color: primary,
+          //           size: 25,
+          //         ),
+          //         title: TextBS("Simple"),
+          //       ),
+          //     ),
+          //     const PopupMenuItem(
+          //       value: 2,
+          //       child: ListTile(
+          //         dense: true,
+          //         contentPadding:
+          //             EdgeInsetsDirectional.only(start: 0.0, end: 0.0),
+          //         leading: Icon(
+          //           Icons.memory,
+          //           color: primary,
+          //           size: 20,
+          //         ),
+          //         title: TextBS("Digital"),
+          //       ),
+          //     ),
+          //   ],
+          // ),
+          //   ],
+          // ),
         ],
       ),
     );
@@ -593,76 +449,87 @@ class _OrderListState extends State<OrderList>
   Future<void> _playAnimation() async {
     try {
       await orderListProvider!.buttonController!.forward();
-    } on TickerCanceled {}
+    } on TickerCanceled {
+      debugPrint('cancelled');
+    }
   }
 
   _filterRow() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width * .375,
-            height: 30,
-            child: ElevatedButton(
-              onPressed: () => _startDate(context),
-              style: ElevatedButton.styleFrom(
-                side: const BorderSide(color: primary),
-                backgroundColor: primary,
-                foregroundColor: Colors.white,
-                disabledForegroundColor: Colors.grey,
-              ),
-              child: Text(
-                orderListProvider!.start == null
-                    ? getTranslated(context, "Start Date")!
-                    : orderListProvider!.start!,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
+          Expanded(
+            flex: 2,
+            child: ButtonSmall(
+                data: getTranslated(context, "Start Date")!,
+                onPressed: () {
+                  Picker.pickDate(
+                      context: context,
+                      initialDateTime: orderListProvider!.startDate,
+                      onDateTimeChanged: (DateTime newdate) {
+                        setState(
+                          () {
+                            orderListProvider!.startDate = newdate;
+                            orderListProvider!.start = DateFormat('dd-MM-yyyy')
+                                .format(orderListProvider!.startDate);
+                            if (orderListProvider!.start != null &&
+                                orderListProvider!.end != null) {
+                              orderListProvider!.scrollLoadmore = true;
+                              orderListProvider!.scrollOffset = 0;
+                              orderListProvider!.getOrder(setStateNow, context);
+                            }
+                          },
+                        );
+                      });
+                }),
           ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width * .375,
-            height: 30,
-            child: ElevatedButton(
-              onPressed: () => _endDate(context),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: primary,
-                foregroundColor: Colors.white,
-                disabledForegroundColor: Colors.grey,
-              ),
-              child: Text(orderListProvider!.end == null
-                  ? getTranslated(context, "End Date")!
-                  : orderListProvider!.end!),
-            ),
+          const SizedBox(width: 5),
+          Expanded(
+            flex: 2,
+            child: ButtonSmall(
+                data: getTranslated(context, "End Date")!,
+                onPressed: () {
+                  Picker.pickDate(
+                    context: context,
+                    initialDateTime: orderListProvider!.startDate,
+                    onDateTimeChanged: (DateTime newdate) {
+                      setState(
+                        () {
+                          orderListProvider!.endDate = newdate;
+                          orderListProvider!.end = DateFormat('dd-MM-yyyy')
+                              .format(orderListProvider!.endDate);
+                          if (orderListProvider!.start != null &&
+                              orderListProvider!.end != null) {
+                            orderListProvider!.scrollLoadmore = true;
+                            orderListProvider!.scrollOffset = 0;
+                            orderListProvider!.getOrder(setStateNow, context);
+                          }
+                        },
+                      );
+                    },
+                  );
+                }),
           ),
-          SizedBox(
-            height: 30,
-            width: 40,
-            child: ElevatedButton(
-              onPressed: () {
-                setState(
-                  () {
-                    orderListProvider!.start = null;
-                    orderListProvider!.end = null;
-                    orderListProvider!.startDate = DateTime.now();
-                    orderListProvider!.endDate = DateTime.now();
-                    orderListProvider!.scrollLoadmore = true;
-                    orderListProvider!.scrollOffset = 0;
-                  },
-                );
-                orderListProvider!.getOrder(setStateNow, context);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: primary,
-                foregroundColor: Colors.white,
-                disabledForegroundColor: Colors.grey,
-                padding: const EdgeInsets.all(0),
-              ),
-              child: const Center(
-                child: Icon(Icons.close),
-              ),
-            ),
+          const SizedBox(width: 5),
+          Expanded(
+            flex: 1,
+            child: ButtonSmall(
+                data: 'Refresh',
+                onPressed: () {
+                  setState(
+                    () {
+                      orderListProvider!.start = null;
+                      orderListProvider!.end = null;
+                      orderListProvider!.startDate = DateTime.now();
+                      orderListProvider!.endDate = DateTime.now();
+                      orderListProvider!.scrollLoadmore = true;
+                      orderListProvider!.scrollOffset = 0;
+                    },
+                  );
+                  orderListProvider!.getOrder(setStateNow, context);
+                }),
           ),
         ],
       ),

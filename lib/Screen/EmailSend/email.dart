@@ -73,7 +73,6 @@ class _SendMailState extends State<SendMail> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    print("order iteam id : ${widget.orderIteamId}");
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     return Scaffold(

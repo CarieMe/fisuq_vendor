@@ -1,11 +1,13 @@
+import 'package:fisuq_vendor/theming/colors/app_colors.dart';
+import 'package:fisuq_vendor/theming/text/text.dart';
 import 'package:flutter/material.dart';
 import '../../../Helper/Color.dart';
 import '../../../Helper/Constant.dart';
 
 class CommanButton extends StatelessWidget {
-  bool selected;
-  String title;
-  CommanButton({
+  final bool selected;
+  final String title;
+  const CommanButton({
     Key? key,
     required this.selected,
     required this.title,
@@ -18,14 +20,17 @@ class CommanButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 3.0),
       child: Container(
-        height: 31,
         decoration: BoxDecoration(
+          border: Border.all(
+            color: Theme.of(context).indicatorColor.withOpacity(0.3),
+            width: .5,
+          ),
           borderRadius:
               const BorderRadius.all(Radius.circular(circularBorderRadius5)),
           gradient: LinearGradient(
             colors: [
-              selected ? grad1Color : white,
-              selected ? grad2Color : white
+              selected ? AppColor.primary : Theme.of(context).canvasColor,
+              selected ? AppColor.secondary : Theme.of(context).canvasColor,
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -44,15 +49,9 @@ class CommanButton extends StatelessWidget {
           ],
         ),
         child: Center(
-          child: Text(
-            title,
-            style: TextStyle(
-              color: selected ? white : black,
-              fontWeight: FontWeight.w400,
-              fontFamily: "PlusJakartaSans",
-              fontStyle: FontStyle.normal,
-              fontSize: selected ? textFontSize16 : textFontSize14,
-            ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextBS(title),
           ),
         ),
       ),
@@ -60,38 +59,27 @@ class CommanButton extends StatelessWidget {
   }
 }
 
-commanBtn(String title, bool fromNoDesing, bool outoffStock) {
+commanBtn(String title, bool fromNoDesing, bool outoffStock, context) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 3.0),
     child: Container(
-      height: 25,
       decoration: BoxDecoration(
+        border: Border.all(
+          color: Theme.of(context).indicatorColor.withOpacity(0.5),
+          width: .5,
+        ),
         color: fromNoDesing
             ? outoffStock
-                ? newPrimary.withOpacity(1.0)
-                : Colors.green.withOpacity(0.80)
-            : white,
+                ? AppColor.red.withOpacity(.5)
+                : AppColor.green.withOpacity(.5)
+            : Theme.of(context).canvasColor,
         borderRadius: BorderRadius.circular(circularBorderRadius5),
-        boxShadow: [
-          fromNoDesing
-              ? const BoxShadow()
-              : const BoxShadow(
-                  color: blarColor,
-                  offset: Offset(0, 0),
-                  blurRadius: 4,
-                  spreadRadius: 0,
-                ),
-        ],
       ),
       child: Center(
-        child: Text(
-          title,
-          style: TextStyle(
-            color: fromNoDesing ? white : black,
-            fontWeight: FontWeight.w400,
-            fontFamily: "PlusJakartaSans",
-            fontStyle: FontStyle.normal,
-            fontSize: textFontSize10,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextTL(
+            title,
           ),
         ),
       ),

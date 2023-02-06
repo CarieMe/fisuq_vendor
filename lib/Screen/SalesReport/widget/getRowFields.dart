@@ -1,3 +1,4 @@
+import 'package:fisuq_vendor/theming/text/text.dart';
 import 'package:flutter/material.dart';
 import '../../../Helper/Color.dart';
 import '../../../Helper/Constant.dart';
@@ -17,51 +18,46 @@ class GetRowFields extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: title == "${getTranslated(context, 'Final Total')} : " ||
-                  title == getTranslated(context, "Grand Final Total :")!
-              ? Theme.of(context).textTheme.button!.copyWith(
-                    color: black,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: "PlusJakartaSans",
-                    fontStyle: FontStyle.normal,
-                    fontSize: textFontSize14,
-                  )
-              : Theme.of(context).textTheme.button!.copyWith(
-                    color: grey3,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: "PlusJakartaSans",
-                    fontStyle: FontStyle.normal,
-                    fontSize: textFontSize14,
-                  ),
-        ),
-        Text(
-          () {
-            if (simple) {
-              return value;
-            } else {
-              return DesignConfiguration.getPriceFormat(
-                context,
-                double.parse(value),
-              )!;
-            }
-          }(),
-          style: Theme.of(context).textTheme.button!.copyWith(
-                color: title == "${getTranslated(context, 'Final Total')} : " ||
-                        title == getTranslated(context, "Grand Final Total :")!
-                    ? black
-                    : grey3,
-                fontWeight: FontWeight.w400,
-                fontFamily: "PlusJakartaSans",
-                fontStyle: FontStyle.normal,
-                fontSize: textFontSize14,
+    final finalTotal = "${getTranslated(context, 'Final Total')} : ";
+    final grandTotal = getTranslated(context, "Grand Final Total :");
+    return title == finalTotal || title == grandTotal
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextIB(data: title, size: 16),
+              TextIB(
+                data: () {
+                  if (simple) {
+                    return value;
+                  } else {
+                    return DesignConfiguration.getPriceFormat(
+                      context,
+                      double.parse(value),
+                    )!;
+                  }
+                }(),
+                size: 16,
               ),
-        ),
-      ],
-    );
+            ],
+          )
+        : Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextI(title, size: 14),
+              TextI(
+                () {
+                  if (simple) {
+                    return value;
+                  } else {
+                    return DesignConfiguration.getPriceFormat(
+                      context,
+                      double.parse(value),
+                    )!;
+                  }
+                }(),
+                size: 14,
+              ),
+            ],
+          );
   }
 }

@@ -1,9 +1,19 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:fisuq_vendor/Screen/OrderDetail/Widget/order_delivery.dart';
+import 'package:fisuq_vendor/Screen/OrderDetail/Widget/order_notes.dart';
+import 'package:fisuq_vendor/Widget/main/double_bottom_sheet.dart';
+import 'package:fisuq_vendor/Widget/main/scaffold_main.dart';
+import 'package:fisuq_vendor/Widget/main/text_field.dart';
+import 'package:fisuq_vendor/Widget/styled/button_icon.dart';
+import 'package:fisuq_vendor/Widget/styled/icon_main.dart';
+import 'package:fisuq_vendor/Widget/styled/neuro_containder.dart';
+import 'package:fisuq_vendor/theming/colors/app_colors.dart';
+import 'package:fisuq_vendor/theming/helper/const_corners.dart';
+import 'package:fisuq_vendor/theming/text/text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:provider/provider.dart';
 import 'package:fisuq_vendor/Helper/Color.dart';
 import 'package:fisuq_vendor/Widget/parameterString.dart';
@@ -27,7 +37,7 @@ import '../EmailSend/email.dart';
 import '../HomePage/home.dart';
 import '../../Widget/noNetwork.dart';
 import 'Widget/PriceDetail.dart';
-import 'Widget/bankProff.dart';
+import 'Widget/bank_proff.dart';
 import 'Widget/orderBasicDetail.dart';
 import 'Widget/shippingDetail.dart';
 
@@ -55,7 +65,7 @@ class StateOrder extends State<OrderDetail> with TickerProviderStateMixin {
   TextEditingController emailController = TextEditingController();
   TextEditingController messageController = TextEditingController();
   TextEditingController? courierAgencyController, urlController;
-  Order_Model? model;
+  OrderModel? model;
   String? pDate,
       prDate,
       sDate,
@@ -80,7 +90,7 @@ class StateOrder extends State<OrderDetail> with TickerProviderStateMixin {
   ];
   bool isLoading = true;
 
-  List<Order_Model> tempList = [];
+  List<OrderModel> tempList = [];
   bool isProgress = false;
   String? curStatus;
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
@@ -179,7 +189,7 @@ class StateOrder extends State<OrderDetail> with TickerProviderStateMixin {
             var data = getdata["data"];
             if (data.length != 0) {
               tempList = (data as List)
-                  .map((data) => Order_Model.fromJson(data))
+                  .map((data) => OrderModel.fromJson(data))
                   .toList();
 
               for (int i = 0; i < tempList[0].itemList!.length; i++) {
@@ -315,246 +325,222 @@ class StateOrder extends State<OrderDetail> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
-
-    return Scaffold(
+    return MainScaffold(
       key: _scaffoldKey,
-      backgroundColor: lightWhite,
-      floatingActionButton: AnimatedOpacity(
-        duration: const Duration(milliseconds: 100),
-        opacity: fabIsVisible ? 1 : 0,
-        child: customerViewPermission
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  FloatingActionButton.small(
-                    backgroundColor: white,
-                    onPressed: () async {
-                      String text =
-                          '${getTranslated(context, "Hello")!} ${tempList[0].name},\n${getTranslated(context, "Your order with id")!} : ${tempList[0].id} ${getTranslated(context, "is")!} ${tempList[0].itemList![0].activeStatus}. ${getTranslated(context, "If you have further query feel free to contact us.Thank you")!}';
-                      var androiduri = 'sms:${tempList[0].mobile}?body=$text';
-                      var iosuri = 'sms:${tempList[0].mobile}&body=$text';
-                      var androidencoded = Uri.encodeFull(androiduri);
-                      var iosencoded = Uri.encodeFull(iosuri);
-
-                      if (Platform.isIOS) {
-                        // for iOS phone only
-                        if (await canLaunchUrl(
-                            Uri.parse(iosencoded.toString()))) {
-                          await launchUrl(
-                            Uri.parse(iosencoded.toString()),
-                            mode: LaunchMode.externalApplication,
-                          );
-                        } else {
-                          launchUrl(
-                            Uri.parse(iosencoded.toString()),
-                            mode: LaunchMode.externalApplication,
-                          );
-                        }
-                      } else {
-                        // android , web
-                        if (await canLaunchUrl(
-                            Uri.parse(androidencoded.toString()))) {
-                          await launchUrl(
-                            Uri.parse(androidencoded.toString()),
-                            mode: LaunchMode.externalApplication,
-                          );
-                        } else {
-                          launchUrl(
-                            Uri.parse(androidencoded.toString()),
-                            mode: LaunchMode.externalApplication,
-                          );
-                        }
-                      }
-                      //await launch(uri);
-                    },
-                    heroTag: null,
-                    child: const Icon(
-                      Icons.message,
-                      color: primary,
-                      size: 20,
+      title: getTranslated(context, "ORDER_DETAIL")!,
+      isBottom: false,
+      actions: appbar(),
+      body: Stack(
+        children: [
+          isLoading
+              ? const ShimmerEffect()
+              : SingleChildScrollView(
+                  controller: controller,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      top: 15.0,
+                      bottom: 50.0,
+                      left: 5.0,
+                      right: 5.0,
+                    ),
+                    child: Column(
+                      children: [
+                        OrderBasicDetail(model: model),
+                        const SizedBox(height: 5),
+                        OrderDelivery(model: model),
+                        const SizedBox(height: 5),
+                        OrderNotes(model: model),
+                        MediaQuery.removePadding(
+                          context: context,
+                          removeTop: true,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: model!.itemList!.length,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, i) {
+                              OrderItem orderItem = model!.itemList![i];
+                              return productItem(
+                                orderItem,
+                                model!,
+                                i,
+                              );
+                            },
+                          ),
+                        ),
+                        //complete
+                        model!.payMethod == "Bank Transfer"
+                            ? BankProof(model: model!)
+                            : Container(),
+                        model!.itemList![0].productType == 'digital_product'
+                            ? Container()
+                            : ShippingDetail(tempList: tempList),
+                        PriceDetail(tempList: tempList),
+                        const SizedBox(height: 20)
+                      ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 05,
-                  ),
-                  FloatingActionButton.small(
-                    backgroundColor: white,
-                    onPressed: () async {
-                      String text =
-                          '${getTranslated(context, "Hello")!} ${tempList[0].name} \n${getTranslated(context, "Your order with id")!} : ${tempList[0].id} ${getTranslated(context, "is")!} ${tempList[0].itemList![0].activeStatus}. ${getTranslated(context, "If you have further query feel free to contact us.Thank you")!}.';
-
-                      var whatsapp =
-                          ("${tempList[0].countryCode!}${tempList[0].mobile!}");
-                      var whatsappURlAndroid =
-                          "https://wa.me/$whatsapp?text=$text";
-                      var whatappURLIos = "https://wa.me/$whatsapp?text=$text";
-                      var encoded = Uri.encodeFull(whatappURLIos);
-
-                      if (Platform.isIOS) {
-                        // for iOS phone only
-                        if (await canLaunchUrl(Uri.parse(encoded.toString()))) {
-                          await launchUrl(
-                            Uri.parse(
-                              encoded.toString(),
-                            ),
-                            mode: LaunchMode.externalApplication,
-                          );
-                        } else {
-                          launchUrl(
-                            Uri.parse(
-                              encoded.toString(),
-                            ),
-                            mode: LaunchMode.externalApplication,
-                          );
-                        }
-                      } else {
-                        // android , web
-                        if (await canLaunchUrl(Uri.parse(encoded.toString()))) {
-                          await launchUrl(
-                            Uri.parse(encoded.toString()),
-                            mode: LaunchMode.externalApplication,
-                          );
-                        } else {
-                          launchUrl(
-                            Uri.parse(encoded.toString()),
-                            mode: LaunchMode.externalApplication,
-                          );
-                        }
-                      }
-                    },
-                    heroTag: null,
-                    child: Image.asset(
-                      DesignConfiguration.setPngPath('whatsapp'),
-                      width: 20,
-                      height: 20,
-                      color: primary,
-                    ),
-                  ),
-                ],
-              )
-            : Container(),
+                ),
+          DesignConfiguration.showLoader(isProgress, context),
+        ],
       ),
-      body: isNetworkAvail
-          ? Stack(
-              children: [
-                isLoading
-                    ? const ShimmerEffect()
-                    : Column(
-                        children: [
-                          GradientAppBar(
-                            getTranslated(context, "ORDER_DETAIL")!,
-                          ),
-                          Expanded(
-                            child: SingleChildScrollView(
-                              controller: controller,
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                  top: 15.0,
-                                  bottom: 15.0,
-                                  left: 15.0,
-                                  right: 15.0,
-                                ),
-                                child: Column(
-                                  children: [
-                                    OrderBasicDetail(model: model),
-                                    model!.delDate != null &&
-                                            model!.delDate!.isNotEmpty
-                                        ? Padding(
-                                            padding: const EdgeInsets.only(
-                                              top: 10.0,
-                                            ),
-                                            child: Container(
-                                              decoration: const BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(
-                                                        circularBorderRadius5)),
-                                                color: white,
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: blarColor,
-                                                      offset: Offset(0, 0),
-                                                      blurRadius: 4,
-                                                      spreadRadius: 0),
-                                                ],
-                                              ),
-                                              height: 52,
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                  top: 6.0,
-                                                  left: 10.0,
-                                                  right: 10.0,
-                                                  bottom: 6.0,
-                                                ),
-                                                child: Text(
-                                                  "${getTranslated(context, "PREFER_DATE_TIME")!}: ${model!.delDate!} - ${model!.delTime!}",
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .subtitle2!
-                                                      .copyWith(
-                                                        fontFamily:
-                                                            'PlusJakartaSans',
-                                                        color: grey3,
-                                                        fontSize:
-                                                            textFontSize13,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        fontStyle:
-                                                            FontStyle.normal,
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                        : Container(),
-                                    //iteam's here
-                                    MediaQuery.removePadding(
-                                      context: context,
-                                      removeTop: true,
-                                      child: ListView.builder(
-                                        shrinkWrap: true,
-                                        itemCount: model!.itemList!.length,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        itemBuilder: (context, i) {
-                                          OrderItem orderItem =
-                                              model!.itemList![i];
-                                          return productItem(
-                                            orderItem,
-                                            model!,
-                                            i,
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    //complete
-                                    model!.payMethod == "Bank Transfer"
-                                        ? BankProof(model: model!)
-                                        : Container(),
-                                    model!.itemList![0].productType ==
-                                            'digital_product'
-                                        ? Container()
-                                        : ShippingDetail(tempList: tempList),
-                                    PriceDetail(tempList: tempList),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                DesignConfiguration.showCircularProgress(isProgress, primary),
-              ],
-            )
-          : noInternet(
-              context,
-              setStateNoInternate,
-              buttonSqueezeanimation,
-              buttonController,
-            ),
     );
+  }
+
+  Widget bottomSheet(BuildContext context) {
+    return DoubleBottom(
+      label1: 'Send SMS',
+      label2: 'Whatsapp',
+      function1: () async {
+        await sendSmsFunction().then((value) {
+          if (value == true) {
+            debugPrint('success');
+          }
+        });
+      },
+      function2: () async {
+        await sendWhatsAppFunction().then((value) {
+          if (value == true) {
+            debugPrint('success');
+          }
+        });
+      },
+      icon1: 'sms',
+      icon2: 'whatsapp',
+    );
+  }
+
+  List<Widget> appbar() {
+    return <Widget>[
+      ButtonIcon(
+        data: const IconMain(
+          icon: 'sms',
+          size: 27,
+        ),
+        onPressed: () async {
+          await sendSmsFunction().then((value) {
+            if (value == true) {
+              debugPrint('success');
+            }
+          });
+        },
+      ),
+      const SizedBox(width: 20),
+      ButtonIcon(
+        data: const IconMain(
+          icon: 'whatsapp',
+          size: 27,
+        ),
+        onPressed: () async {
+          await sendWhatsAppFunction().then((value) {
+            if (value == true) {
+              debugPrint('success');
+            }
+          });
+        },
+      ),
+      const SizedBox(width: 20),
+    ];
+  }
+
+  Future<bool> sendSmsFunction() async {
+    bool success = false;
+    String text =
+        '${getTranslated(context, "Hello")!} ${tempList[0].name},\n${getTranslated(context, "Your order with id")!} : ${tempList[0].id} ${getTranslated(context, "is")!} ${tempList[0].itemList![0].activeStatus}. ${getTranslated(context, "If you have further query feel free to contact us.Thank you")!}';
+    var androiduri = 'sms:${tempList[0].mobile}?body=$text';
+    var iosuri = 'sms:${tempList[0].mobile}&body=$text';
+    var androidencoded = Uri.encodeFull(androiduri);
+    var iosencoded = Uri.encodeFull(iosuri);
+
+    try {
+      if (Platform.isIOS) {
+        // for iOS phone only
+        if (await canLaunchUrl(Uri.parse(iosencoded.toString()))) {
+          await launchUrl(
+            Uri.parse(iosencoded.toString()),
+            mode: LaunchMode.externalApplication,
+          );
+          success = true;
+        } else {
+          launchUrl(
+            Uri.parse(iosencoded.toString()),
+            mode: LaunchMode.externalApplication,
+          );
+          success = true;
+        }
+      } else {
+        // android , web
+        if (await canLaunchUrl(Uri.parse(androidencoded.toString()))) {
+          await launchUrl(
+            Uri.parse(androidencoded.toString()),
+            mode: LaunchMode.externalApplication,
+          );
+          success = true;
+        } else {
+          launchUrl(
+            Uri.parse(androidencoded.toString()),
+            mode: LaunchMode.externalApplication,
+          );
+          success = true;
+        }
+      }
+    } catch (e) {
+      debugPrint('$e');
+      success = false;
+    }
+    return success;
+  }
+
+  Future<bool> sendWhatsAppFunction() async {
+    bool success = false;
+    String text =
+        '${getTranslated(context, "Hello")!} ${tempList[0].name} \n${getTranslated(context, "Your order with id")!} : ${tempList[0].id} ${getTranslated(context, "is")!} ${tempList[0].itemList![0].activeStatus}. ${getTranslated(context, "If you have further query feel free to contact us.Thank you")!}.';
+    var whatsapp = ("${tempList[0].countryCode!}${tempList[0].mobile!}");
+    var whatsappURlAndroid = "https://wa.me/$whatsapp?text=$text";
+    var whatappURLIos = "https://wa.me/$whatsapp?text=$text";
+    var encoded = Uri.encodeFull(whatappURLIos);
+
+    try {
+      if (Platform.isIOS) {
+        // for iOS phone only
+        if (await canLaunchUrl(Uri.parse(encoded.toString()))) {
+          await launchUrl(
+            Uri.parse(
+              encoded.toString(),
+            ),
+            mode: LaunchMode.externalApplication,
+          );
+          success = true;
+        } else {
+          launchUrl(
+            Uri.parse(
+              encoded.toString(),
+            ),
+            mode: LaunchMode.externalApplication,
+          );
+          success = true;
+        }
+      } else {
+        // android , web
+        if (await canLaunchUrl(Uri.parse(encoded.toString()))) {
+          await launchUrl(
+            Uri.parse(encoded.toString()),
+            mode: LaunchMode.externalApplication,
+          );
+          success = true;
+        } else {
+          launchUrl(
+            Uri.parse(encoded.toString()),
+            mode: LaunchMode.externalApplication,
+          );
+          success = true;
+        }
+      }
+    } catch (e) {
+      debugPrint('$e');
+      success = false;
+    }
+
+    return success;
   }
 
   // emailSendButtomSheet(
@@ -738,86 +724,84 @@ class StateOrder extends State<OrderDetail> with TickerProviderStateMixin {
               contentPadding: const EdgeInsets.all(0.0),
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
-                  Radius.circular(
-                    circularBorderRadius5,
-                  ),
+                  Radius.circular(circularBorderRadius15),
                 ),
               ),
-              content: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20.0, 20.0, 0, 0),
-                    child: Text(
-                      getTranslated(context, "SELECTDELBOY")!,
-                      style: Theme.of(this.context)
-                          .textTheme
-                          .subtitle1!
-                          .copyWith(color: primary),
-                    ),
-                  ),
-                  TextField(
-                    controller: _controller,
-                    autofocus: false,
-                    decoration: InputDecoration(
-                      contentPadding:
-                          const EdgeInsets.fromLTRB(0, 15.0, 0, 15.0),
-                      prefixIcon:
-                          const Icon(Icons.search, color: primary, size: 17),
-                      hintText: getTranslated(context, "Search")!,
-                      hintStyle: TextStyle(color: primary.withOpacity(0.5)),
-                      enabledBorder: const UnderlineInputBorder(
-                        borderSide: BorderSide(color: white),
+              content: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.9,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextC(
+                        getTranslated(context, "SELECTDELBOY")!,
+                        size: 17,
                       ),
-                      focusedBorder: const UnderlineInputBorder(
-                        borderSide: BorderSide(color: white),
+                      const SizedBox(height: 15),
+                      TextFild(
+                        controller: _controller,
+                        autofocus: false,
+                        enabled: true,
+                        prefixIcon: const Icon(
+                          Icons.search,
+                          color: primary,
+                          size: 17,
+                        ),
+                        hintText: getTranslated(context, "Search")!,
                       ),
-                    ),
-                  ),
-                  const Divider(color: lightBlack),
-                  Flexible(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: () {
-                          return searchList
-                              .asMap()
-                              .map(
-                                (index, element) => MapEntry(
-                                  index,
-                                  InkWell(
-                                    onTap: () {
-                                      Navigator.of(context).pop();
-                                      isLoading = true;
-                                      if (mounted) {
-                                        selectedDelBoy = index;
-                                        updateOrder(status, updateOrderItemApi,
-                                            model!.id, true, itemindex);
-                                        setState(
-                                          () {},
-                                        );
-                                      }
-                                    },
-                                    child: SizedBox(
-                                      width: double.maxFinite,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          searchList[index].name!,
+                      const SizedBox(height: 10),
+                      Divider(color: Theme.of(context).indicatorColor),
+                      const SizedBox(height: 10),
+                      Flexible(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: () {
+                              return searchList
+                                  .asMap()
+                                  .map(
+                                    (index, element) => MapEntry(
+                                      index,
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.of(context).pop();
+                                          isLoading = true;
+                                          if (mounted) {
+                                            selectedDelBoy = index;
+                                            updateOrder(
+                                                status,
+                                                updateOrderItemApi,
+                                                model!.id,
+                                                true,
+                                                itemindex);
+                                            setState(
+                                              () {},
+                                            );
+                                          }
+                                        },
+                                        child: SizedBox(
+                                          width: double.maxFinite,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: TextBL(
+                                              searchList[index].name!,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                              )
-                              .values
-                              .toList();
-                        }(),
+                                  )
+                                  .values
+                                  .toList();
+                            }(),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
             );
           },
@@ -974,7 +958,7 @@ class StateOrder extends State<OrderDetail> with TickerProviderStateMixin {
 
   productItem(
     OrderItem orderItem,
-    Order_Model model,
+    OrderModel model,
     int i,
   ) {
     List att = [], val = [];
@@ -985,24 +969,10 @@ class StateOrder extends State<OrderDetail> with TickerProviderStateMixin {
     final index1 = searchList
         .indexWhere((element) => element.id == orderItem.deliveryBoyId);
     return Padding(
-      padding: const EdgeInsets.only(top: 10.0),
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        decoration: const BoxDecoration(
-          borderRadius:
-              BorderRadius.all(Radius.circular(circularBorderRadius5)),
-          color: white,
-          boxShadow: [
-            BoxShadow(
-              color: blarColor,
-              offset: Offset(0, 0),
-              blurRadius: 4,
-              spreadRadius: 0,
-            ),
-          ],
-        ),
+      padding: const EdgeInsets.only(top: 5.0),
+      child: NeuContainer(
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(15.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -1016,7 +986,7 @@ class StateOrder extends State<OrderDetail> with TickerProviderStateMixin {
                       boxFit: BoxFit.cover,
                       context: context,
                       heightvalue: 94,
-                      widthvalue: 64,
+                      widthvalue: MediaQuery.of(context).size.width * 0.3,
                       imageurlString: orderItem.image!,
                       placeHolderSize: 150,
                     ),
@@ -1027,23 +997,8 @@ class StateOrder extends State<OrderDetail> with TickerProviderStateMixin {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 10.0),
-                            child: Text(
-                              orderItem.name ?? '',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1!
-                                  .copyWith(
-                                    color: black,
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: "PlusJakartaSans",
-                                    fontStyle: FontStyle.normal,
-                                    fontSize: textFontSize13,
-                                  ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                          TextBL(
+                            orderItem.name ?? '',
                           ),
                           orderItem.attr_name!.isNotEmpty
                               ? ListView.builder(
@@ -1097,409 +1052,45 @@ class StateOrder extends State<OrderDetail> with TickerProviderStateMixin {
                                   },
                                 )
                               : Container(),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "${getTranslated(context, "QUANTITY_LBL")!}:",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle2!
-                                      .copyWith(color: lightBlack2),
+                          Row(
+                            children: [
+                              TextI(
+                                "${getTranslated(context, "QUANTITY_LBL")!}:",
+                                size: 16,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5.0),
+                                child: TextBL(
+                                  orderItem.qty!,
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 5.0),
-                                  child: Text(
-                                    orderItem.qty!,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .subtitle2!
-                                        .copyWith(color: lightBlack),
-                                  ),
-                                )
-                              ],
-                            ),
+                              )
+                            ],
                           ),
-                          Text(
+                          TextBL(
                             DesignConfiguration.getPriceFormat(
                               context,
                               double.parse(orderItem.price!),
                             )!,
-                            style: const TextStyle(
-                              color: primary,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: "PlusJakartaSans",
-                              fontStyle: FontStyle.normal,
-                              fontSize: textFontSize13,
-                            ),
                           ),
-                          orderItem.productType == 'digital_product'
-                              ? orderItem.downloadAllowed == "0"
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(
-                                        top: 15.0,
-                                      ),
-                                      child: InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            CupertinoPageRoute(
-                                              builder: (context) => SendMail(
-                                                email: tempList[0].email ?? '',
-                                                productName:
-                                                    orderItem.name ?? '',
-                                                orderId: model.id ?? '',
-                                                orderIteamId:
-                                                    orderItem.id ?? '',
-                                                userName: model.username ?? '',
-                                              ),
-                                            ),
-                                          );
-                                          // emailSendButtomSheet(context,
-                                          //     setState, orderItem.name);
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: primary,
-                                            ),
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(
-                                                  circularBorderRadius5),
-                                            ),
-                                          ),
-                                          height: 40,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          child: const Center(
-                                            child: Text(
-                                              "Send Mail",
-                                              style: TextStyle(
-                                                color: primary,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : Container()
-                              : Container(),
-//==============================================================================
-//============================ Status of Order =================================
-
-                          orderItem.productType == 'digital_product'
-                              ? Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10.0),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 8.0),
-                                          child: DropdownButtonFormField(
-                                            dropdownColor: lightBlack,
-                                            isDense: true,
-                                            iconEnabledColor: primary,
-                                            hint: Text(
-                                              getTranslated(
-                                                  context, "UpdateStatus")!,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .subtitle2!
-                                                  .copyWith(
-                                                      color: primary,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ),
-                                            decoration: const InputDecoration(
-                                              filled: true,
-                                              isDense: true,
-                                              fillColor: white,
-                                              contentPadding:
-                                                  EdgeInsets.symmetric(
-                                                      vertical: 10,
-                                                      horizontal: 10),
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide:
-                                                    BorderSide(color: primary),
-                                              ),
-                                            ),
-                                            value: orderItem.status,
-                                            onChanged: (dynamic newValue) {
-                                              setState(
-                                                () {
-                                                  orderItem.curSelected =
-                                                      newValue;
-                                                  updateOrder(
-                                                    orderItem.curSelected,
-                                                    updateOrderItemApi,
-                                                    model.id,
-                                                    true,
-                                                    i,
-                                                  );
-                                                },
-                                              );
-                                            },
-                                            items: digitalList.map(
-                                              (String st) {
-                                                return DropdownMenuItem<String>(
-                                                  value: st,
-                                                  child: Text(
-                                                    () {
-                                                      if (StringValidation
-                                                              .capitalize(st) ==
-                                                          "Received") {
-                                                        return getTranslated(
-                                                            context,
-                                                            "RECEIVED_LBL")!;
-                                                      } else if (StringValidation
-                                                              .capitalize(st) ==
-                                                          "Delivered") {
-                                                        return getTranslated(
-                                                            context,
-                                                            "DELIVERED_LBL")!;
-                                                      }
-                                                      return StringValidation
-                                                          .capitalize(st);
-                                                    }(),
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .subtitle2!
-                                                        .copyWith(
-                                                            color: primary,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                  ),
-                                                );
-                                              },
-                                            ).toList(),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              : Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10.0),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 8.0),
-                                          child: DropdownButtonFormField(
-                                            dropdownColor: lightBlack,
-                                            isDense: true,
-                                            iconEnabledColor: primary,
-                                            hint: Text(
-                                              getTranslated(
-                                                  context, "UpdateStatus")!,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .subtitle2!
-                                                  .copyWith(
-                                                      color: primary,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ),
-                                            decoration: const InputDecoration(
-                                              filled: true,
-                                              isDense: true,
-                                              fillColor: white,
-                                              contentPadding:
-                                                  EdgeInsets.symmetric(
-                                                      vertical: 10,
-                                                      horizontal: 10),
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide:
-                                                    BorderSide(color: primary),
-                                              ),
-                                            ),
-                                            value: orderItem.status,
-                                            onChanged: (dynamic newValue) {
-                                              setState(
-                                                () {
-                                                  orderItem.curSelected =
-                                                      newValue;
-                                                  updateOrder(
-                                                    orderItem.curSelected,
-                                                    updateOrderItemApi,
-                                                    model.id,
-                                                    true,
-                                                    i,
-                                                  );
-                                                },
-                                              );
-                                            },
-                                            items: statusList.map(
-                                              (String st) {
-                                                return DropdownMenuItem<String>(
-                                                  value: st,
-                                                  child: Text(
-                                                    () {
-                                                      if (StringValidation
-                                                              .capitalize(st) ==
-                                                          "Received") {
-                                                        return getTranslated(
-                                                            context,
-                                                            "RECEIVED_LBL")!;
-                                                      } else if (StringValidation
-                                                              .capitalize(st) ==
-                                                          "Processed") {
-                                                        return getTranslated(
-                                                            context,
-                                                            "PROCESSED_LBL")!;
-                                                      } else if (StringValidation
-                                                              .capitalize(st) ==
-                                                          "Shipped") {
-                                                        return getTranslated(
-                                                            context,
-                                                            "SHIPED_LBL")!;
-                                                      } else if (StringValidation
-                                                              .capitalize(st) ==
-                                                          "Delivered") {
-                                                        return getTranslated(
-                                                            context,
-                                                            "DELIVERED_LBL")!;
-                                                      } else if (StringValidation
-                                                              .capitalize(st) ==
-                                                          "Awaiting") {
-                                                        return getTranslated(
-                                                            context,
-                                                            "AWAITING_LBL")!;
-                                                      } else if (StringValidation
-                                                              .capitalize(st) ==
-                                                          "Returned") {
-                                                        return getTranslated(
-                                                            context,
-                                                            "RETURNED_LBL")!;
-                                                      } else if (StringValidation
-                                                              .capitalize(st) ==
-                                                          "Cancelled") {
-                                                        return getTranslated(
-                                                            context,
-                                                            "CANCELLED_LBL")!;
-                                                      }
-                                                      return StringValidation
-                                                          .capitalize(st);
-                                                    }(),
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .subtitle2!
-                                                        .copyWith(
-                                                            color: primary,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                  ),
-                                                );
-                                              },
-                                            ).toList(),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-//==============================================================================
-//============================ Select Delivery Boy =============================
-                          orderItem.productType == 'digital_product'
-                              ? Container()
-                              : delPermission == '1'
-                                  ? Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 5.0),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            flex: 1,
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 8.0),
-                                              child: InkWell(
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                      color: primary,
-                                                    ),
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                      Radius.circular(
-                                                          circularBorderRadius5),
-                                                    ),
-                                                  ),
-                                                  padding:
-                                                      const EdgeInsets.all(10),
-                                                  child: Row(
-                                                    children: [
-                                                      Expanded(
-                                                        child: Text(
-                                                          index1 != -1
-                                                              ? orderItem
-                                                                  .deliverBy!
-                                                              : getTranslated(
-                                                                  context,
-                                                                  "SELECTDELBOY",
-                                                                )!,
-                                                          maxLines: 1,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .subtitle2!
-                                                                  .copyWith(
-                                                                    color:
-                                                                        primary,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                        ),
-                                                      ),
-                                                      const Icon(
-                                                        Icons.arrow_drop_down,
-                                                        color: primary,
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                onTap: () {
-                                                  delboyDialog(
-                                                      orderItem.status!, i);
-                                                },
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 8.0),
-                                            child: InkWell(
-                                              onTap: () {
-                                                showTrackingDialog(
-                                                    orderItem, i);
-                                              },
-                                              child: const Icon(
-                                                Icons.add_location_alt_sharp,
-                                                size: 30,
-                                                color: primary,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  : Container(),
                         ],
                       ),
                     ),
                   )
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: buildUpdateStatus(orderItem, model, i),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    flex: 1,
+                    child: delPermission == '1'
+                        ? buildSelectDeliveryBoy(index1, orderItem, i)
+                        : const SizedBox.shrink(),
+                  ),
                 ],
               ),
             ],
@@ -1509,229 +1100,112 @@ class StateOrder extends State<OrderDetail> with TickerProviderStateMixin {
     );
   }
 
-  showTrackingDialog(OrderItem model, int index) async {
-    String? urlDetails, couriourDetails, trackingDetails;
-    if (model.trackingId != "") {
-      urlDetails = model.url;
-      couriourDetails = model.courierAgency;
-      trackingDetails = model.trackingId;
-    }
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setStater) {
-            return AlertDialog(
-              contentPadding: const EdgeInsets.all(0.0),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(
-                    circularBorderRadius5,
-                  ),
+  Padding buildSelectDeliveryBoy(int index1, OrderItem orderItem, int i) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10.0),
+      child: InkWell(
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColor.primary.withOpacity(.2),
+            borderRadius: const BorderRadius.all(
+              Radius.circular(circularBorderRadius5),
+            ),
+          ),
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextBL(
+                  index1 != -1
+                      ? orderItem.deliverBy!
+                      : getTranslated(
+                          context,
+                          "SELECTDELBOY",
+                        )!,
                 ),
               ),
-              content: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                        padding: const EdgeInsets.fromLTRB(20.0, 20.0, 0, 2.0),
-                        child: Text(
-                          getTranslated(context, "Tracking Detail")!,
-                          style: Theme.of(this.context)
-                              .textTheme
-                              .subtitle1!
-                              .copyWith(color: primary),
-                        )),
-                    const Divider(color: lightBlack),
-                    Form(
-                      key: _formkey,
-                      child: Column(
-                        children: <Widget>[
-                          Padding(
-                            padding:
-                                const EdgeInsets.fromLTRB(20.0, 0, 20.0, 0),
-                            child: TextFormField(
-                              keyboardType: TextInputType.text,
-                              validator: validateField,
-                              initialValue: couriourDetails,
-                              decoration: InputDecoration(
-                                hintText:
-                                    getTranslated(context, "Courier Agency"),
-                                hintStyle: Theme.of(this.context)
-                                    .textTheme
-                                    .subtitle1!
-                                    .copyWith(
-                                      color: lightBlack,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                              ),
-                              controller: courierAgencyController,
-                              onSaved: (value) {
-                                courierAgency = value;
-                              },
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.fromLTRB(20.0, 0, 20.0, 0),
-                            child: TextFormField(
-                              keyboardType: TextInputType.text,
-                              validator: validateField,
-                              initialValue: trackingDetails,
-                              decoration: InputDecoration(
-                                hintText: getTranslated(context, "Tracking ID"),
-                                hintStyle: Theme.of(this.context)
-                                    .textTheme
-                                    .subtitle1!
-                                    .copyWith(
-                                      color: lightBlack,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                              ),
-                              onSaved: (value) {
-                                trackingId = value;
-                              },
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.fromLTRB(20.0, 0, 20.0, 0),
-                            child: TextFormField(
-                              keyboardType: TextInputType.text,
-                              validator: validateField,
-                              initialValue: urlDetails,
-                              decoration: InputDecoration(
-                                hintText: "URL",
-                                hintStyle: Theme.of(this.context)
-                                    .textTheme
-                                    .subtitle1!
-                                    .copyWith(
-                                      color: lightBlack,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                              ),
-                              controller: urlController,
-                              onSaved: (value) {
-                                url = value;
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              actions: <Widget>[
-                TextButton(
-                  child: Text(
-                    getTranslated(context, 'CANCEL')!,
-                    style: Theme.of(this.context).textTheme.subtitle2!.copyWith(
-                          color: lightBlack,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  onPressed: () {
-                    Routes.pop(context);
-                  },
-                ),
-                TextButton(
-                  child: Text(
-                    getTranslated(context, "SAVE_LBL")!,
-                    style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                          color: primary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  onPressed: () {
-                    final form = _formkey.currentState!;
-                    if (form.validate()) {
-                      form.save();
-                      setState(
-                        () {
-                          isLoading = true;
-                          Routes.pop(context);
-                        },
-                      );
-                      editTrackingDetails(
-                          model, courierAgency, trackingId, url);
-                    }
-                  },
-                )
-              ],
-            );
-          },
-        );
-      },
+              const Icon(
+                Icons.arrow_drop_down,
+                color: AppColor.rate1,
+              )
+            ],
+          ),
+        ),
+        onTap: () {
+          delboyDialog(orderItem.status!, i);
+        },
+      ),
     );
   }
 
-  Future<void> editTrackingDetails(
-    OrderItem model,
-    String? courierAgency,
-    String? trackingId,
-    String? url,
-  ) async {
-    isNetworkAvail = await isNetworkAvailable();
-
-    if (isNetworkAvail) {
-      try {
-        var parameter = {
-          "order_item_id": model.id,
-          courier_agency: courierAgency,
-          tracking_id: trackingId,
-          Url: url,
-        };
-        ApiBaseHelper().postAPICall(editOrderTrackingApi, parameter).then(
-          (getdata) async {
-            bool error = getdata["error"];
-            String msg = getdata["message"];
-            setSnackbar(
-              msg,
-              context,
-            );
-            if (!error) {
-              getOrderDetail();
-            } else {
-              getOrderDetail();
-            }
-          },
-          onError: (error) {
-            setSnackbar(
-              error.toString(),
-              context,
-            );
-          },
-        );
-      } on TimeoutException catch (_) {
-        setSnackbar(
-          getTranslated(
-            context,
-            "somethingMSg",
-          )!,
-          context,
-        );
-      }
-    } else {
-      setState(
-        () {
-          isNetworkAvail = false;
-        },
-      );
-    }
-  }
-
-  String? validateField(
-    String? value,
+  Padding buildUpdateStatus(
+    OrderItem orderItem,
+    OrderModel model,
+    int i,
   ) {
-    if (value!.isEmpty) {
-      return getTranslated(context, "This Field is required");
-    } else {
-      return null;
-    }
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+      child: DropdownButtonFormField(
+        dropdownColor: Theme.of(context).canvasColor,
+        isDense: true,
+        iconEnabledColor: AppColor.rate1,
+        hint: TextBL(
+          getTranslated(context, "UpdateStatus")!,
+        ),
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: AppColor.primary.withOpacity(.2),
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          border: const OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+          ),
+        ),
+        value: orderItem.status,
+        onChanged: (dynamic newValue) {
+          setState(
+            () {
+              orderItem.curSelected = newValue;
+              updateOrder(
+                orderItem.curSelected,
+                updateOrderItemApi,
+                model.id,
+                true,
+                i,
+              );
+            },
+          );
+        },
+        items: statusList.map(
+          (String st) {
+            return DropdownMenuItem<String>(
+              value: st,
+              child: TextBL(
+                () {
+                  if (StringValidation.capitalize(st) == "Received") {
+                    return getTranslated(context, "RECEIVED_LBL")!;
+                  } else if (StringValidation.capitalize(st) == "Processed") {
+                    return getTranslated(context, "PROCESSED_LBL")!;
+                  } else if (StringValidation.capitalize(st) == "Shipped") {
+                    return getTranslated(context, "SHIPED_LBL")!;
+                  } else if (StringValidation.capitalize(st) == "Delivered") {
+                    return getTranslated(context, "DELIVERED_LBL")!;
+                  } else if (StringValidation.capitalize(st) == "Awaiting") {
+                    return getTranslated(context, "AWAITING_LBL")!;
+                  } else if (StringValidation.capitalize(st) == "Returned") {
+                    return getTranslated(context, "RETURNED_LBL")!;
+                  } else if (StringValidation.capitalize(st) == "Cancelled") {
+                    return getTranslated(context, "CANCELLED_LBL")!;
+                  }
+                  return StringValidation.capitalize(st);
+                }(),
+              ),
+            );
+          },
+        ).toList(),
+      ),
+    );
   }
 
   Future<void> updateOrder(
@@ -1741,61 +1215,43 @@ class StateOrder extends State<OrderDetail> with TickerProviderStateMixin {
     bool item,
     int index,
   ) async {
-    isNetworkAvail = await isNetworkAvailable();
-    if (true) {
-      if (isNetworkAvail) {
-        try {
-          var parameter = {
-            STATUS: status,
-          };
-          if (item) {
-            parameter[ORDERITEMID] = tempList[0].itemList![index].id;
+    try {
+      var parameter = {
+        STATUS: status,
+      };
+      if (item) {
+        parameter[ORDERITEMID] = tempList[0].itemList![index].id;
+      }
+      if (selectedDelBoy != null) {
+        parameter[DEL_BOY_ID] = searchList[selectedDelBoy!].id;
+      }
+      ApiBaseHelper().postAPICall(updateOrderItemApi, parameter).then(
+        (getdata) async {
+          bool error = getdata["error"];
+          String msg = getdata["message"];
+          Snack.message(msg, context);
+          if (!error) {
+            if (item) {
+              tempList[0].itemList![index].status = status;
+            } else {
+              tempList[0].itemList![0].activeStatus = status;
+            }
+            if (selectedDelBoy != null) {
+              tempList[0].itemList![0].deliveryBoyId =
+                  searchList[selectedDelBoy!].id;
+            }
+            getOrderDetail();
+          } else {
+            getOrderDetail();
           }
-          if (selectedDelBoy != null) {
-            parameter[DEL_BOY_ID] = searchList[selectedDelBoy!].id;
-          }
-          ApiBaseHelper().postAPICall(updateOrderItemApi, parameter).then(
-            (getdata) async {
-              bool error = getdata["error"];
-              String msg = getdata["message"];
-              setSnackbar(
-                msg,
-                context,
-              );
-              if (!error) {
-                if (item) {
-                  tempList[0].itemList![index].status = status;
-                } else {
-                  tempList[0].itemList![0].activeStatus = status;
-                }
-                if (selectedDelBoy != null) {
-                  tempList[0].itemList![0].deliveryBoyId =
-                      searchList[selectedDelBoy!].id;
-                }
-                getOrderDetail();
-              } else {
-                getOrderDetail();
-              }
-            },
-            onError: (error) {
-              setSnackbar(
-                error.toString(),
-                context,
-              );
-            },
-          );
-        } on TimeoutException catch (_) {
-          setSnackbar(
-            getTranslated(context, "somethingMSg")!,
-            context,
-          );
-        }
-      } else {
-        setState(
-          () {
-            isNetworkAvail = false;
-          },
-        );
+        },
+        onError: (error) {
+          Snack.message(error.toString(), context);
+        },
+      );
+    } on TimeoutException catch (_) {
+      if (mounted) {
+        Snack.message("somethingMSg", context);
       }
     }
   }

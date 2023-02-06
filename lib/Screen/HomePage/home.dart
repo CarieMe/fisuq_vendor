@@ -1,17 +1,17 @@
 import 'dart:async';
+import 'package:fisuq_vendor/Widget/styled/neuro_containder.dart';
+import 'package:fisuq_vendor/theming/text/text.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fisuq_vendor/Helper/ApiBaseHelper.dart';
 import 'package:fisuq_vendor/Helper/Color.dart';
-import 'package:fisuq_vendor/Helper/Constant.dart';
 import 'package:fisuq_vendor/Widget/desing.dart';
 import 'package:fisuq_vendor/Widget/parameterString.dart';
 import 'package:fisuq_vendor/Localization/Language_Constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../Helper/PushNotificationService.dart';
 import '../../Model/OrdersModel/OrderModel.dart';
-import '../../Provider/homeProvider.dart';
+import '../../Provider/home_provider.dart';
 import '../../Provider/privacyProvider.dart';
 import '../../Provider/settingProvider.dart';
 import '../../Widget/api.dart';
@@ -32,10 +32,10 @@ import 'Widget/boxesDesingHome.dart';
 import 'Widget/randomColorWidget.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
-  _HomeState createState() => _HomeState();
+  State<Home> createState() => _HomeState();
 }
 
 ApiBaseHelper apiBaseHelper = ApiBaseHelper();
@@ -66,7 +66,7 @@ class _HomeState extends State<Home>
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  List<Order_Model> tempList = [];
+  List<OrderModel> tempList = [];
   @override
   bool get wantKeepAlive => true;
   setStateProfile() {
@@ -117,8 +117,8 @@ class _HomeState extends State<Home>
     context.read<HomeProvider>().getSalesReportRequest(context);
     SystemChromeSettings.setSystemButtomNavigationBarithTopAndButtom();
     SystemChromeSettings.setSystemUIOverlayStyleWithLightBrightNessStyle();
-    final pushNotificationService = PushNotificationService(context: context);
-    pushNotificationService.initialise();
+    //final pushNotificationService = PushNotificationService(context: context);
+    //pushNotificationService.initialise();
     providerRequiestForData();
     getSallerDetail();
     buttonController = AnimationController(
@@ -164,7 +164,7 @@ class _HomeState extends State<Home>
       key: scaffoldMessengerKey,
       child: Scaffold(
         key: _scaffoldKey,
-        backgroundColor: lightWhite,
+        backgroundColor: Theme.of(context).backgroundColor,
         body: getBodyPart(),
       ),
     );
@@ -175,113 +175,98 @@ class _HomeState extends State<Home>
 
   getChart() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(circularBorderRadius15),
-          color: Colors.white,
-          boxShadow: const [
-            BoxShadow(
-              color: blarColor,
-              offset: Offset(0, 0),
-              blurRadius: 4,
-              spreadRadius: 0,
+      padding: const EdgeInsets.fromLTRB(10, 30, 10, 30),
+      child: NeuContainer(
+        child: SizedBox(
+          height: 250,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0, top: 8),
+                      child: TextBL(
+                        getTranslated(context, "ProductSales")!,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          style: curChart == 0
+                              ? TextButton.styleFrom(
+                                  foregroundColor: Colors.white,
+                                  backgroundColor: primary,
+                                  disabledForegroundColor: Colors.grey,
+                                )
+                              : null,
+                          onPressed: () {
+                            setState(
+                              () {
+                                curChart = 0;
+                              },
+                            );
+                          },
+                          child: TextBM(
+                            getTranslated(context, "Day")!,
+                          ),
+                        ),
+                        TextButton(
+                          style: curChart == 1
+                              ? TextButton.styleFrom(
+                                  foregroundColor: Colors.white,
+                                  backgroundColor: primary,
+                                  disabledForegroundColor: Colors.grey,
+                                )
+                              : null,
+                          onPressed: () {
+                            setState(
+                              () {
+                                curChart = 1;
+                              },
+                            );
+                          },
+                          child: TextBM(
+                            getTranslated(context, "Week")!,
+                          ),
+                        ),
+                        TextButton(
+                          style: curChart == 2
+                              ? TextButton.styleFrom(
+                                  foregroundColor: Colors.white,
+                                  backgroundColor: primary,
+                                  disabledForegroundColor: Colors.grey,
+                                )
+                              : null,
+                          onPressed: () {
+                            setState(
+                              () {
+                                curChart = 2;
+                              },
+                            );
+                          },
+                          child: TextBM(
+                            getTranslated(context, "Month")!,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Expanded(
+                  child: LineChart(
+                    chartList![curChart]!,
+                    swapAnimationDuration: const Duration(milliseconds: 250),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-        height: 250,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget>[
-              Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0, top: 8),
-                  child: Text(
-                    getTranslated(context, "ProductSales")!,
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6!
-                        .copyWith(color: primary),
-                  ),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    style: curChart == 0
-                        ? TextButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: primary,
-                            disabledForegroundColor: Colors.grey,
-                          )
-                        : null,
-                    onPressed: () {
-                      setState(
-                        () {
-                          curChart = 0;
-                        },
-                      );
-                    },
-                    child: Text(
-                      getTranslated(context, "Day")!,
-                    ),
-                  ),
-                  TextButton(
-                    style: curChart == 1
-                        ? TextButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: primary,
-                            disabledForegroundColor: Colors.grey,
-                          )
-                        : null,
-                    onPressed: () {
-                      setState(
-                        () {
-                          curChart = 1;
-                        },
-                      );
-                    },
-                    child: Text(
-                      getTranslated(context, "Week")!,
-                    ),
-                  ),
-                  TextButton(
-                    style: curChart == 2
-                        ? TextButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: primary,
-                            disabledForegroundColor: Colors.grey,
-                          )
-                        : null,
-                    onPressed: () {
-                      setState(
-                        () {
-                          curChart = 2;
-                        },
-                      );
-                    },
-                    child: Text(
-                      getTranslated(context, "Month")!,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Expanded(
-                child: LineChart(
-                  chartList![curChart]!,
-                  swapAnimationDuration: const Duration(milliseconds: 250),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-            ],
           ),
         ),
       ),
@@ -292,54 +277,42 @@ class _HomeState extends State<Home>
 //========================= get_seller_details API =============================
 
   Future<void> getSallerDetail() async {
-    isNetworkAvail = await isNetworkAvailable();
-    if (isNetworkAvail) {
-      context.read<SettingProvider>().CUR_USERID = await getPrefrence(Id);
-      var parameter = {Id: context.read<SettingProvider>().CUR_USERID};
-      ApiBaseHelper().postAPICall(getSellerDetailsApi, parameter).then(
-        (getdata) async {
-          bool error = getdata["error"];
-          if (!error) {
-            var data = getdata["data"][0];
-            CUR_BALANCE = double.parse(data[BALANCE]).toStringAsFixed(2);
-            LOGO = data["logo"].toString();
-            RATTING = data[Rating] ?? "";
-            NO_OFF_RATTING = data[NoOfRatings] ?? "";
-            var id = data[Id];
-            var username = data[Username];
-            mobile = data[Mobile];
-            context.read<SettingProvider>().CUR_USERID = id!;
-            CUR_USERNAME = username!;
-            saveUserDetail(
-              id!,
-              username!,
-              mobile!,
-            );
-          }
-          setState(
-            () {
-              _isLoading = false;
-            },
+    var parameter = {Id: context.read<SettingProvider>().CUR_USERID};
+    context.read<SettingProvider>().CUR_USERID = await getPrefrence(Id);
+
+    ApiBaseHelper().postAPICall(getSellerDetailsApi, parameter).then(
+      (getdata) async {
+        bool error = getdata["error"];
+        if (!error) {
+          var data = getdata["data"][0];
+          CUR_BALANCE = double.parse(data[BALANCE]).toStringAsFixed(2);
+          LOGO = data["logo"].toString();
+          RATTING = data[Rating] ?? "";
+          NO_OFF_RATTING = data[NoOfRatings] ?? "";
+          var id = data[Id];
+          var username = data[Username];
+          mobile = data[Mobile];
+          context.read<SettingProvider>().CUR_USERID = id!;
+          CUR_USERNAME = username!;
+          saveUserDetail(
+            id!,
+            username!,
+            mobile!,
           );
-        },
-        onError: (error) {
-          setSnackbar(
-            error.toString(),
-            context,
-          );
-        },
-      );
-    } else {
-      if (mounted) {
+        }
         setState(
           () {
-            isNetworkAvail = false;
             _isLoading = false;
           },
         );
-      }
-    }
-    return;
+      },
+      onError: (error) {
+        setSnackbar(
+          error.toString(),
+          context,
+        );
+      },
+    );
   }
 
   setStateNow() {
@@ -348,7 +321,6 @@ class _HomeState extends State<Home>
 
   Future<bool> onWillPopScope() {
     DateTime now = DateTime.now();
-
     if (currentBackPressTime == null ||
         now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
       currentBackPressTime = now;
@@ -384,244 +356,14 @@ class _HomeState extends State<Home>
                             child: SingleChildScrollView(
                               child: Column(
                                 children: [
-                                  Container(
-                                    decoration: const BoxDecoration(
-                                      gradient: LinearGradient(
-                                        colors: [grad1Color, grad2Color],
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                        stops: [0, 1],
-                                        tileMode: TileMode.clamp,
-                                      ),
-                                    ),
-                                    height: 200,
-                                    width: MediaQuery.of(context).size.width,
-                                    child: SafeArea(
-                                      child: Stack(
-                                        children: [
-                                          Opacity(
-                                            opacity: 0.17000000178813934,
-                                            child: Container(
-                                              width: width,
-                                              height: 1,
-                                              decoration: const BoxDecoration(
-                                                color: Color(0xffffffff),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 155,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsetsDirectional
-                                                      .only(
-                                                top: 9.0,
-                                                start: 15,
-                                                end: 15,
-                                              ),
-                                              child: Text(
-                                                "${getTranslated(context, 'Welcome')}, $CUR_USERNAME",
-                                                style: const TextStyle(
-                                                  fontFamily: 'PlusJakartaSans',
-                                                  color: Color(0xffffffff),
-                                                  fontSize: textFontSize16,
-                                                  fontWeight: FontWeight.w400,
-                                                  fontStyle: FontStyle.normal,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Positioned.directional(
-                                            textDirection:
-                                                Directionality.of(context),
-                                            top: 64,
-                                            end: 0,
-                                            child: Container(
-                                              decoration: const BoxDecoration(
-                                                color: lightWhite,
-                                              ),
-                                              height: 124,
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                            ),
-                                          ),
-                                          Positioned.directional(
-                                            textDirection:
-                                                Directionality.of(context),
-                                            top: 38,
-                                            end: 15,
-                                            start: 15,
-                                            child: Container(
-                                              decoration: const BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(
-                                                        circularBorderRadius15)),
-                                                color: white,
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: blarColor,
-                                                    offset: Offset(0, 0),
-                                                    blurRadius: 4,
-                                                    spreadRadius: 0,
-                                                  ),
-                                                ],
-                                              ),
-                                              height: 130,
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              child: Column(
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                      top: 8.0,
-                                                      bottom: 8.0,
-                                                    ),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Text(
-                                                            getTranslated(context,
-                                                                "Total Sale")!,
-                                                            style: const TextStyle(
-                                                                color: Color(
-                                                                    0xffff9366),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400,
-                                                                fontFamily:
-                                                                    "Roboto",
-                                                                fontStyle:
-                                                                    FontStyle
-                                                                        .normal,
-                                                                fontSize:
-                                                                    textFontSize12),
-                                                            textAlign:
-                                                                TextAlign.left)
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                      bottom: 8.0,
-                                                    ),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Text(
-                                                            DesignConfiguration
-                                                                    .getPriceFormat(
-                                                                  context,
-                                                                  double.parse(value
-                                                                      .totalSalesAmount),
-                                                                ) ??
-                                                                '0.0',
-                                                            style: const TextStyle(
-                                                                color: black,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400,
-                                                                fontFamily:
-                                                                    "Roboto",
-                                                                fontStyle:
-                                                                    FontStyle
-                                                                        .normal,
-                                                                fontSize:
-                                                                    textFontSize14),
-                                                            textAlign:
-                                                                TextAlign.left)
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 8.0),
-                                                    child: Opacity(
-                                                      opacity:
-                                                          0.05000000074505806,
-                                                      child: Container(
-                                                          width: 327,
-                                                          height: 1,
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                                  color: Color(
-                                                                      0xff707070))),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        vertical: 10.0),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceEvenly,
-                                                      children: [
-                                                        gethomePageTextDesing(
-                                                            RATTING, "Rating"),
-                                                        Opacity(
-                                                          opacity:
-                                                              0.05000000074505806,
-                                                          child: Container(
-                                                              width: 1,
-                                                              height: 40,
-                                                              decoration:
-                                                                  const BoxDecoration(
-                                                                      color: Color(
-                                                                          0xff707070))),
-                                                        ),
-                                                        gethomePageTextDesing(
-                                                            value.totalproductCount ??
-                                                                '0',
-                                                            getTranslated(
-                                                                context,
-                                                                "Total Product")!),
-                                                        Opacity(
-                                                          opacity:
-                                                              0.05000000074505806,
-                                                          child: Container(
-                                                              width: 1,
-                                                              height: 40,
-                                                              decoration:
-                                                                  const BoxDecoration(
-                                                                      color: Color(
-                                                                          0xff707070))),
-                                                        ),
-                                                        gethomePageTextDesing(
-                                                            value.totalorderCount ??
-                                                                "0",
-                                                            getTranslated(
-                                                                context,
-                                                                "Total orders")!),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
+                                  buildHeader(context, value),
                                   Padding(
-                                    padding: const EdgeInsets.only(
-                                      right: 15,
-                                      left: 15,
-                                      top: 15,
-                                    ),
+                                    padding: const EdgeInsets.fromLTRB(
+                                        10, 20, 10, 0),
                                     child: Row(
                                       children: [
                                         boxesDesingHome(
-                                          'Balance',
+                                          'icon_balance',
                                           getTranslated(
                                               context, 'BALANCE_LBL')!,
                                           DesignConfiguration.getPriceFormat(
@@ -631,9 +373,12 @@ class _HomeState extends State<Home>
                                           context,
                                         ),
                                         boxesDesingHome(
-                                          'Report',
+                                          'icon_report',
                                           getTranslated(context, 'Report')!,
-                                          value.grandFinalTotalOfSales,
+                                          DesignConfiguration.getPriceFormat(
+                                              context,
+                                              double.parse(value
+                                                  .grandFinalTotalOfSales))!,
                                           1,
                                           context,
                                         ),
@@ -641,12 +386,12 @@ class _HomeState extends State<Home>
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15, vertical: 15),
+                                    padding: const EdgeInsets.fromLTRB(
+                                        10, 10, 10, 0),
                                     child: Row(
                                       children: [
                                         boxesDesingHome(
-                                          'SoldOutProduct',
+                                          'icon_soldout',
                                           getTranslated(
                                               context, "Sold Out Products")!,
                                           value.totalsoldOutCount,
@@ -654,7 +399,7 @@ class _HomeState extends State<Home>
                                           context,
                                         ),
                                         boxesDesingHome(
-                                          'LowStockProduct',
+                                          'icon_lowstock',
                                           getTranslated(
                                               context, 'Low Stock Products')!,
                                           value.totallowStockCount,
@@ -679,6 +424,57 @@ class _HomeState extends State<Home>
               )
             : noInternet(context, setStateNoInternate, buttonSqueezeanimation,
                 buttonController));
+  }
+
+  Widget buildHeader(BuildContext context, HomeProvider value) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 65, 10, 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextLL(
+            "${getTranslated(context, 'Welcome')}, $CUR_USERNAME",
+          ),
+          const SizedBox(height: 20),
+          NeuContainer(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(30, 30, 30, 30),
+              child: Column(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextLL(
+                        DesignConfiguration.getPriceFormat(
+                              context,
+                              double.parse(value.totalSalesAmount),
+                            ) ??
+                            '0.0',
+                      ),
+                      TextC(
+                        getTranslated(context, "Total Sale")!,
+                        size: 16,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      gethomePageTextDesing(RATTING, "Rating"),
+                      gethomePageTextDesing(value.totalproductCount ?? '0',
+                          getTranslated(context, "Total Product")!),
+                      gethomePageTextDesing(value.totalorderCount ?? "0",
+                          getTranslated(context, "Total orders")!),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   setStateNoInternate() async {
@@ -740,12 +536,10 @@ class _HomeState extends State<Home>
   }
 
   Future<void> providerRequiestForData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String getlng = await getPrefrence(LAGUAGE_CODE) ?? '';
-
-    selectLan = langCode.indexOf(getlng == '' ? "en" : getlng);
-
     await context.read<HomeProvider>().allocateAllData(context);
+    String getlng = await getPrefrence(LAGUAGE_CODE) ?? '';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    selectLan = langCode.indexOf(getlng == '' ? "en" : getlng);
   }
 
   Future<void> getSetting() async {

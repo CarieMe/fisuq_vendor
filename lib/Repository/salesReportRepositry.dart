@@ -12,7 +12,7 @@ class SalesReportRepository {
 
       return taxDetail;
     } on Exception catch (e) {
-      throw ApiException('Something went wrong');
+      throw ApiException('Something went wrong $e');
     }
   }
 }
