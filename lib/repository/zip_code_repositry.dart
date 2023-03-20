@@ -1,0 +1,18 @@
+import 'dart:async';
+import 'package:vendor/helper/api_base_helper.dart';
+import 'package:vendor/widget/api.dart';
+
+class ZipcodeRepository {
+  // for add faqs.
+  static Future<Map<String, dynamic>> setZipCode() async {
+    try {
+      var parameter = {};
+      var zipCodeDetail =
+          await ApiBaseHelper().postAPICall(getZipcodesApi, parameter);
+
+      return zipCodeDetail;
+    } on Exception catch (e) {
+      throw ApiException('Something went wrong');
+    }
+  }
+}

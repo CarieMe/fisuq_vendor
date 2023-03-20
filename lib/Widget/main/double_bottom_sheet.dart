@@ -1,6 +1,5 @@
-import 'package:fisuq_vendor/Widget/styled/button_main.dart';
-import 'package:fisuq_vendor/Widget/styled/button_main_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:vendor/helper/theming.dart';
 
 class DoubleBottom extends StatelessWidget {
   final String label1;
@@ -27,19 +26,17 @@ class DoubleBottom extends StatelessWidget {
         children: [
           Expanded(
             flex: 1,
-            child: ButtonMainIcon(
+            child: AppButton.main(
               data: label1,
-              onPressed: function1,
-              icon: icon1,
+              onTap: function1,
             ),
           ),
           const SizedBox(width: 10),
           Expanded(
             flex: 1,
-            child: ButtonMainIcon(
+            child: AppButton.main(
               data: label2,
-              onPressed: function2,
-              icon: icon2,
+              onTap: function2,
             ),
           ),
         ],

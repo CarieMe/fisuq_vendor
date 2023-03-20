@@ -8,7 +8,7 @@ void showOverlay(
 ) async {
   // Declaring and Initializing OverlayState
   // and OverlayEntry objects
-  OverlayState overlayState = Overlay.of(context)!;
+  OverlayState overlayState = Overlay.of(context);
   OverlayEntry overlayEntry;
   overlayEntry = OverlayEntry(
     builder: (context) {

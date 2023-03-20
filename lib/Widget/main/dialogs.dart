@@ -1,10 +1,7 @@
-import 'package:fisuq_vendor/Widget/desing.dart';
-import 'package:fisuq_vendor/Widget/styled/neuro_containder.dart';
-import 'package:fisuq_vendor/Widget/validation.dart';
-import 'package:fisuq_vendor/theming/helper/const_corners.dart';
-import 'package:fisuq_vendor/theming/text/text.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:vendor/helper/theming.dart';
+import 'package:vendor/widget/design.dart';
 
 class Dialogs {
   static showLoader(BuildContext context) async {
@@ -22,14 +19,15 @@ class Dialogs {
             width: 250,
             height: 250,
             decoration: BoxDecoration(
-              borderRadius: Corners.cornerMd,
+              borderRadius: Corners.br20,
               border: Border.all(
                 color: Theme.of(context).indicatorColor.withOpacity(0.2),
                 width: 0.1,
               ),
               color: Theme.of(context).backgroundColor,
             ),
-            child: NeuContainer(
+            child: NeuContainer.simple(
+              context: context,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -69,14 +67,15 @@ class Dialogs {
             width: 250,
             height: 250,
             decoration: BoxDecoration(
-              borderRadius: Corners.cornerMd,
+              borderRadius: Corners.br20,
               border: Border.all(
                 color: Theme.of(context).indicatorColor.withOpacity(0.2),
                 width: 0.1,
               ),
               color: Theme.of(context).backgroundColor,
             ),
-            child: NeuContainer(
+            child: NeuContainer.simple(
+              context: context,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -90,11 +89,11 @@ class Dialogs {
                       ),
                       const SizedBox(height: 30),
                       TextLL(
-                        getTranslated(context, 'NO_INTERNET')!.toUpperCase(),
+                        Local.nointernat,
                       ),
                       const SizedBox(height: 30),
                       TextI(
-                        getTranslated(context, 'NO_INTERNET_DISC')!,
+                        Local.nointernetdescription,
                         size: 15,
                       ),
                     ],
@@ -123,14 +122,15 @@ class Dialogs {
             width: 250,
             height: 250,
             decoration: BoxDecoration(
-              borderRadius: Corners.cornerMd,
+              borderRadius: Corners.br20,
               border: Border.all(
                 color: Theme.of(context).indicatorColor.withOpacity(0.2),
                 width: 0.1,
               ),
               color: Theme.of(context).backgroundColor,
             ),
-            child: NeuContainer(
+            child: NeuContainer.simple(
+              context: context,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -199,7 +199,7 @@ class Dialogs {
                           TextC('No Internet', size: 18),
                           const SizedBox(height: 10),
                           TextIC(
-                            getTranslated(context, 'LOGOUTTXT')!,
+                            Local.logout,
                             size: 15,
                           ),
                         ],
@@ -214,7 +214,7 @@ class Dialogs {
                             TextC('No Internet', size: 18),
                             const SizedBox(height: 10),
                             TextIC(
-                              getTranslated(context, 'LOGOUTTXT')!,
+                              Local.logout,
                               size: 15,
                             ),
                           ],
@@ -312,6 +312,111 @@ class Dialogs {
           ),
         );
       },
+    );
+  }
+
+  static getDialog({
+    required BuildContext context,
+    required String title,
+    required String content,
+    required void Function() confirm,
+    required String confirmLabel,
+    required void Function() dismiss,
+    required String dismissLabel,
+  }) {
+    return Dialog(
+      elevation: 0,
+      backgroundColor: Theme.of(context).backgroundColor,
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: const BorderRadius.all(
+          Radius.circular(15),
+        ),
+        side: BorderSide(
+          width: 1,
+          color: Theme.of(context).highlightColor,
+        ),
+      ),
+      child: SizedBox(
+        width: 250,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  TextLM(title),
+                  const SizedBox(height: 10),
+                  TextCenter(
+                    content,
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: InkWell(
+                    onTap: dismiss,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor.withOpacity(.5),
+                          border: Border(
+                            right: BorderSide(
+                              color: Theme.of(context).highlightColor,
+                              width: 0.5,
+                            ),
+                            top: BorderSide(
+                              color: Theme.of(context).highlightColor,
+                              width: .75,
+                            ),
+                          )),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+                        child: Center(
+                          child: TextBM(dismissLabel),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: InkWell(
+                    onTap: confirm,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor.withOpacity(.5),
+                          border: Border(
+                            left: BorderSide(
+                              color: Theme.of(context).highlightColor,
+                              width: 0.5,
+                            ),
+                            top: BorderSide(
+                              color: Theme.of(context).highlightColor,
+                              width: .75,
+                            ),
+                          )),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+                        child: Center(
+                          child: TextBM(confirmLabel),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

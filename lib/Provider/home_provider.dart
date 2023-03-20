@@ -1,13 +1,11 @@
+import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:fisuq_vendor/Provider/settingProvider.dart';
-import 'dart:math';
-import '../Repository/salesReportRepositry.dart';
-import '../Widget/networkAvailablity.dart';
-import '../Widget/parameterString.dart';
-import '../Repository/homeRepositry.dart';
-import '../Screen/HomePage/home.dart';
-import '../Widget/sharedPreferances.dart';
+import 'package:vendor/helper/exports.dart';
+import 'package:vendor/screen/home_page/home.dart';
+import 'package:vendor/widget/network_availablity.dart';
+import 'package:vendor/widget/shared_preferences.dart';
 
 enum HomeProviderStatus {
   initial,
@@ -29,6 +27,7 @@ class HomeProvider extends ChangeNotifier {
       totaldelBoyCount,
       totalsoldOutCount,
       totallowStockCount;
+  int? overallSale;
   String totalSalesAmount = '0';
   List? weekEarning = [],
       days = [],
@@ -70,6 +69,7 @@ class HomeProvider extends ChangeNotifier {
       totallowStockCount = count["count_products_low_status"];
       totalcustCount = count["user_counter"];
       delPermission = count["permissions"]['assign_delivery_boy'];
+      overallSale = getStatics['earnings'][0]["overall_sale"];
       weekEarning = getStatics['earnings'][0]["weekly_earnings"]['total_sale'];
       days = getStatics['earnings'][0]["daily_earnings"]['day'];
       dayEarning = getStatics['earnings'][0]["daily_earnings"]['total_sale'];
@@ -113,15 +113,10 @@ class HomeProvider extends ChangeNotifier {
       var result = await SalesReportRepository.getSalesReportRequest(
         parameter: parameter,
       );
-      var totalOFSales = await HomeRepository.fetchSalesReport(
-        parameter: parameter,
-      );
+      print("result****$result");
       bool error = result["error"];
       if (!error) {
-        //total_sale
-        //totalSalesAmount = result["total_delivery_charge"];
-        //totalSalesAmount = result["total_sale"];
-        totalSalesAmount = totalOFSales;
+        totalSalesAmount = result["total_delivery_charge"];
       } else {
         totalSalesAmount = '0';
       }

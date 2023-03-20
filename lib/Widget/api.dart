@@ -1,7 +1,4 @@
-//==============================================================================
-//========================= All API's here =====================================
-
-import '../Helper/Constant.dart';
+import 'package:vendor/helper/constant.dart';
 
 final Uri getUserLoginApi = Uri.parse('${baseUrl}login');
 final Uri getOrdersApi = Uri.parse('${baseUrl}get_orders');

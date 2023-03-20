@@ -1,21 +1,22 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../Helper/Color.dart';
-import '../../Helper/Constant.dart';
-import '../../Provider/ProfileProvider.dart';
-import '../../Provider/settingProvider.dart';
-import '../../Widget/ButtonDesing.dart';
-import '../../Widget/appBar.dart';
-import '../../Widget/desing.dart';
-import '../../Widget/networkAvailablity.dart';
-import '../../Widget/routes.dart';
-import '../../Widget/validation.dart';
-import 'Widget/getFirstHeader.dart';
-import 'Widget/getFourthHeader.dart';
-import 'Widget/getProfileImage.dart';
-import 'Widget/getSecondHeader.dart';
-import 'Widget/getThirdHeader.dart';
+import 'package:vendor/helper/color.dart';
+import 'package:vendor/helper/constant.dart';
+import 'package:vendor/helper/theming.dart';
+import 'package:vendor/provider/profile_provider.dart';
+import 'package:vendor/provider/setting_provider.dart';
+import 'package:vendor/screen/profile/widget/first_header.dart';
+import 'package:vendor/screen/profile/widget/fourth_header.dart';
+import 'package:vendor/screen/profile/widget/profile_image.dart';
+import 'package:vendor/screen/profile/widget/second_header.dart';
+import 'package:vendor/screen/profile/widget/third_header.dart';
+import 'package:vendor/widget/appbar.dart';
+import 'package:vendor/widget/button_design.dart';
+import 'package:vendor/widget/design.dart';
+import 'package:vendor/widget/network_availablity.dart';
+import 'package:vendor/widget/routes.dart';
+import 'package:vendor/widget/validation.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -135,7 +136,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
     return Column(
       children: [
         GradientAppBar(
-          getTranslated(context, "EDIT_PROFILE_LBL")!,
+          Local.editprofilelabel,
         ),
         Flexible(
           child: SingleChildScrollView(
@@ -186,7 +187,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                getTranslated(context, "CHANGE_PASS_LBL")!,
+                Local.changepasswordlabel,
                 style: Theme.of(context)
                     .textTheme
                     .subtitle2!
@@ -234,7 +235,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(20.0, 20.0, 0, 2.0),
                       child: Text(
-                        getTranslated(context, "CHANGE_PASS_LBL")!,
+                        Local.changepasswordlabel,
                         style: Theme.of(this.context)
                             .textTheme
                             .subtitle1!
@@ -260,8 +261,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
                               decoration: InputDecoration(
-                                hintText:
-                                    getTranslated(context, "CUR_PASS_LBL")!,
+                                hintText: Local.currentpasswordlable,
                                 hintStyle: Theme.of(this.context)
                                     .textTheme
                                     .subtitle1!
@@ -305,8 +305,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
                               decoration: InputDecoration(
-                                hintText:
-                                    getTranslated(context, "NEW_PASS_LBL")!,
+                                hintText: Local.newpasslbl,
                                 hintStyle: Theme.of(this.context)
                                     .textTheme
                                     .subtitle1!
@@ -340,12 +339,10 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                               keyboardType: TextInputType.text,
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return getTranslated(
-                                      context, "CON_PASS_REQUIRED_MSG")!;
+                                  return Local.confirmpasswordrequired;
                                 }
                                 if (value != profileProvider!.newPass) {
-                                  return getTranslated(
-                                      context, "CON_PASS_NOT_MATCH_MSG")!;
+                                  return Local.confirmpasswordnotmatch;
                                 } else {
                                   return null;
                                 }
@@ -353,8 +350,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
                               decoration: InputDecoration(
-                                hintText: getTranslated(
-                                    context, "CONFIRMPASSHINT_LBL")!,
+                                hintText: Local.confirmpasswordlabel,
                                 hintStyle: Theme.of(this.context)
                                     .textTheme
                                     .subtitle1!
@@ -395,7 +391,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
               actions: <Widget>[
                 TextButton(
                   child: Text(
-                    getTranslated(context, "CANCEL")!,
+                    Local.cancel,
                     style: Theme.of(this.context).textTheme.subtitle2!.copyWith(
                         color: lightBlack, fontWeight: FontWeight.bold),
                   ),
@@ -405,7 +401,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                 ),
                 TextButton(
                   child: Text(
-                    getTranslated(context, "SAVE_LBL")!,
+                    Local.savelbl,
                     style: Theme.of(this.context)
                         .textTheme
                         .subtitle2!
@@ -433,7 +429,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
 
   updateBtn() {
     return AppBtn(
-      title: getTranslated(context, "Update Profile")!,
+      title: Local.updateprofile,
       btnAnim: profileProvider!.buttonSqueezeanimation,
       btnCntrl: profileProvider!.buttonController,
       onBtnSelected: () async {

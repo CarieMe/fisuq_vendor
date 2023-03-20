@@ -1,5 +1,5 @@
-import 'package:fisuq_vendor/theming/colors/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:vendor/theming/base/app_color.dart';
 
 class TextDL extends StatelessWidget {
   const TextDL(this.data, {super.key});
@@ -9,7 +9,7 @@ class TextDL extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       data,
-      style: Theme.of(context).textTheme.bodyLarge!,
+      style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 15),
     );
   }
 }
@@ -22,7 +22,7 @@ class TextDM extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       data,
-      style: Theme.of(context).textTheme.displayMedium!,
+      style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 13),
     );
   }
 }
@@ -35,7 +35,7 @@ class TextDS extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       data,
-      style: Theme.of(context).textTheme.displaySmall!,
+      style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 11),
     );
   }
 }
@@ -209,7 +209,7 @@ class TextC extends StatelessWidget {
       data,
       style: Theme.of(context).textTheme.titleSmall!.copyWith(
             fontSize: size,
-            color: AppColor.primary,
+            color: AppColors.primary,
           ),
     );
   }
@@ -287,7 +287,7 @@ class TextCO extends StatelessWidget {
       data,
       style: Theme.of(context).textTheme.titleSmall!.copyWith(
             fontSize: size,
-            color: color ?? AppColor.primary,
+            color: color ?? AppColors.primary,
           ),
     );
   }
@@ -304,7 +304,7 @@ class TextB extends StatelessWidget {
       style: Theme.of(context)
           .textTheme
           .bodyLarge!
-          .copyWith(color: AppColor.light0),
+          .copyWith(color: AppColors.light0),
     );
   }
 }
@@ -336,7 +336,7 @@ class TextDiscount extends StatelessWidget {
     return Text(
       data,
       style: Theme.of(context).textTheme.titleMedium!.copyWith(
-            color: AppColor.primary,
+            color: AppColors.primary,
             fontSize: size,
           ),
     );
@@ -367,7 +367,7 @@ class TextRating extends StatelessWidget {
       data,
       textAlign: TextAlign.center,
       style: Theme.of(context).textTheme.labelLarge!.copyWith(
-            color: AppColor.rate1,
+            color: AppColors.rate1,
           ),
     );
   }
@@ -391,17 +391,114 @@ class TextIB extends StatelessWidget {
   }
 }
 
-class TextBT extends StatelessWidget {
-  const TextBT(this.data, {super.key});
+class TextInv extends StatelessWidget {
   final String data;
+  final bool styled;
+  final double? size;
+  final bool? bold;
+  final bool strike;
+  const TextInv({
+    super.key,
+    required this.data,
+    required this.styled,
+    this.size,
+    this.bold,
+    required this.strike,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Text(
       data,
-      style: Theme.of(context).textTheme.displayLarge!.copyWith(
-            fontWeight: FontWeight.w700,
-            color: AppColor.light1,
+      maxLines: 1,
+      //overflow: TextOverflow.ellipsis,
+      textAlign: TextAlign.center,
+      style: styled
+          ? Theme.of(context).textTheme.labelLarge!.copyWith(
+                fontSize: size,
+                color: AppColors.light0,
+                fontWeight: bold! ? FontWeight.bold : FontWeight.w300,
+                decoration: strike ? TextDecoration.lineThrough : null,
+              )
+          : Theme.of(context).textTheme.labelLarge!,
+    );
+  }
+}
+
+class Intro extends StatelessWidget {
+  final String data;
+
+  final double? size;
+  final bool? bold;
+
+  const Intro({
+    super.key,
+    required this.data,
+    this.size,
+    this.bold,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      data,
+      maxLines: 3,
+      //overflow: TextOverflow.ellipsis,
+      textAlign: TextAlign.start,
+      style: Theme.of(context).textTheme.labelLarge!.copyWith(
+            fontSize: size,
+            color: AppColors.light0,
+            fontWeight: bold! ? FontWeight.bold : FontWeight.w300,
+          ),
+    );
+  }
+}
+
+class Sale extends StatelessWidget {
+  final String data;
+  final double? size;
+
+  const Sale({
+    super.key,
+    required this.data,
+    this.size,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      data,
+      maxLines: 3,
+      textAlign: TextAlign.start,
+      style: Theme.of(context).textTheme.labelLarge!.copyWith(
+            fontSize: size,
+            color: AppColors.light0,
+            fontWeight: FontWeight.w900,
+          ),
+    );
+  }
+}
+
+class IntroCenter extends StatelessWidget {
+  final String data;
+  final double? size;
+
+  const IntroCenter({
+    super.key,
+    required this.data,
+    this.size,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      data,
+      maxLines: 3,
+      textAlign: TextAlign.center,
+      style: Theme.of(context).textTheme.labelLarge!.copyWith(
+            fontSize: size,
+            color: AppColors.light0,
+            fontWeight: FontWeight.bold,
           ),
     );
   }

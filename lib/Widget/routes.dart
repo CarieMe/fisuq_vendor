@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
-import '../Screen/AddProduct/Add_Product.dart';
-import '../Screen/Authentication/SellerRegistration.dart';
-import '../Screen/OrderList/OrderList.dart';
-import '../Screen/Profile/profile.dart';
-import '../Screen/SalesReport/SalesReport.dart';
-import '../Screen/Serach/Search.dart';
-import '../main.dart';
+import 'package:vendor/main.dart';
+import 'package:vendor/screen/app_product/add_product.dart';
+import 'package:vendor/screen/authentication/seller_registration.dart';
+import 'package:vendor/screen/order_list/order_list.dart';
+import 'package:vendor/screen/profile/profile.dart';
+import 'package:vendor/screen/sales_report/sales_report.dart';
+import 'package:vendor/screen/search/search.dart';
 
 // comman Rout For All Screen
 class Routes {
@@ -19,7 +19,7 @@ class Routes {
     Navigator.push(
       context,
       CupertinoPageRoute(
-        builder: (context) => FisuqVendor(),
+        builder: (context) => Vendor(),
       ),
     );
   }
@@ -55,7 +55,7 @@ class Routes {
     Navigator.push(
       context,
       CupertinoPageRoute(
-        builder: (context) => OrderList(),
+        builder: (context) => const OrderList(),
       ),
     );
   }
@@ -73,7 +73,7 @@ class Routes {
     Navigator.push(
       context,
       CupertinoPageRoute(
-        builder: (context) => Profile(),
+        builder: (context) => const Profile(),
       ),
     );
   }

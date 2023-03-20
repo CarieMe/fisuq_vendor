@@ -1,9 +1,8 @@
-//======================= AppBar Widget ========================================
 import 'package:flutter/material.dart';
-import '../Helper/Color.dart';
-import '../Helper/Constant.dart';
-import '../Provider/settingProvider.dart';
-import 'desing.dart';
+import 'package:vendor/helper/color.dart';
+import 'package:vendor/helper/constant.dart';
+import 'package:vendor/helper/exports.dart';
+import 'package:vendor/widget/design.dart';
 
 getAppBar(
   String title,

@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:fisuq_vendor/theming/text/text.dart';
+import 'package:vendor/helper/theming.dart';
 import 'package:flutter/material.dart';
 
 class MainScaffold extends StatelessWidget {
@@ -21,14 +21,14 @@ class MainScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
       extendBodyBehindAppBar: false,
       appBar: AppBar(
         automaticallyImplyLeading:
             Platform.isIOS || Platform.isMacOS ? true : false,
-        elevation: 1,
-        backgroundColor: Theme.of(context).backgroundColor,
-        title: TextLL(title),
+        elevation: 0,
+        backgroundColor: Theme.of(context).colorScheme.background,
+        title: HmBol(data: title),
         centerTitle: false,
         actions: actions ?? [],
       ),

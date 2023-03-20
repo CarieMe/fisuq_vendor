@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:fisuq_vendor/theming/text/text.dart';
+import 'package:vendor/theming/text/text.dart';
 import 'package:flutter/material.dart';
 
 class SliverScaffold extends StatelessWidget {

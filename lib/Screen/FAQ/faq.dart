@@ -1,20 +1,17 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
-import 'package:fisuq_vendor/Screen/FAQ/widget/getFaQIteams.dart';
-import '../../Helper/Color.dart';
-import '../../Helper/Constant.dart';
-import '../../Provider/faqProvider.dart';
-import '../../Provider/settingProvider.dart';
-import '../../Widget/appBar.dart';
-import '../../Widget/desing.dart';
-import '../../Widget/networkAvailablity.dart';
-import '../../Model/FAQModel/Faqs_Model.dart';
-import '../../Model/ProductModel/Product.dart';
-import '../../Widget/noNetwork.dart';
-import '../../Widget/snackbar.dart';
-import '../../Widget/validation.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:vendor/helper/color.dart';
+import 'package:vendor/helper/constant.dart';
+import 'package:vendor/helper/exports.dart';
+import 'package:vendor/screen/faq/widget/get_faq_items.dart';
+import 'package:vendor/widget/appbar.dart';
+import 'package:vendor/widget/design.dart';
+import 'package:vendor/widget/network_availablity.dart';
+import 'package:vendor/widget/no_network.dart';
+import 'package:vendor/widget/snackbar.dart';
+import 'package:vendor/widget/validation.dart';
 
 class AddFAQs extends StatefulWidget {
   final String? id;

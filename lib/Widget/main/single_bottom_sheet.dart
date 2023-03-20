@@ -1,5 +1,5 @@
-import 'package:fisuq_vendor/Widget/styled/button_main.dart';
 import 'package:flutter/material.dart';
+import 'package:vendor/helper/theming.dart';
 
 class SingleBottom extends StatelessWidget {
   final String label1;
@@ -14,9 +14,9 @@ class SingleBottom extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 10, 20, 30),
-      child: ButtonMain(
+      child: AppButton.main(
         data: label1,
-        onPressed: function1,
+        onTap: function1,
       ),
     );
   }

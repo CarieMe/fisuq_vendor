@@ -3,10 +3,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:fisuq_vendor/Widget/validation.dart';
-import '../../Helper/Color.dart';
-import '../../Widget/appBar.dart';
-import '../Profile/profile.dart';
+import 'package:vendor/helper/color.dart';
+import 'package:vendor/screen/profile/profile.dart';
+import 'package:vendor/widget/appbar.dart';
+import 'package:vendor/widget/validation.dart';
 
 class MapScreen extends StatefulWidget {
   final double? latitude, longitude;

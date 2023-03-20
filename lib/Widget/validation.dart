@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../Localization/Demo_Localization.dart';
+import 'package:vendor/helper/theming.dart';
+import 'package:vendor/localization/demo_localization.dart';
 
 class StringValidation {
 // product name velidatation
@@ -7,7 +8,7 @@ class StringValidation {
   static String? validateThisFieldRequered(
       String? value, BuildContext context) {
     if (value!.isEmpty) {
-      return getTranslated(context, "This Field is Required!");
+      return Local.thisfieldisrequired;
     }
     return null;
   }
@@ -16,9 +17,9 @@ class StringValidation {
 
   static String? validatePass(String? value, BuildContext context) {
     if (value!.isEmpty) {
-      return getTranslated(context, "PWD_REQUIRED")!;
+      return Local.passwordrequired;
     } else if (value.length <= 5) {
-      return getTranslated(context, "PWD_LENGTH")!;
+      return Local.passwordrequired;
     } else {
       return null;
     }
@@ -28,10 +29,10 @@ class StringValidation {
 
   static String? sortdescriptionvalidate(String? value, BuildContext context) {
     if (value!.isEmpty) {
-      return getTranslated(context, "Sort Description is required");
+      return Local.shortdescription;
     }
     if (value.length < 3) {
-      return getTranslated(context, "minimam 5 character is required ");
+      return Local.minimam5characterisrequired;
     }
     return null;
   }
@@ -40,10 +41,10 @@ class StringValidation {
 
   static String? validateProduct(String? value, BuildContext context) {
     if (value!.isEmpty) {
-      return getTranslated(context, "ProductNameRequired")!;
+      return Local.productnamerequired;
     }
     if (value.length < 3) {
-      return getTranslated(context, 'Please Add Valid Product name');
+      return Local.validproductname;
     }
     return null;
   }
@@ -52,10 +53,10 @@ class StringValidation {
 
   static String? validateMob(String? value, BuildContext context) {
     if (value!.isEmpty) {
-      return getTranslated(context, "MOB_REQUIRED")!;
+      return Local.mobilerequired;
     }
     if (value.length < 5) {
-      return getTranslated(context, "VALID_MOB");
+      return Local.mobileno;
     }
     return null;
   }
@@ -64,7 +65,7 @@ class StringValidation {
 
   static String? validateField(String? value, BuildContext context) {
     if (value!.isEmpty) {
-      return getTranslated(context, "FIELD_REQUIRED")!;
+      return Local.fieldrequired;
     } else {
       return null;
     }
@@ -74,10 +75,10 @@ class StringValidation {
 
   static String? validateUserName(String? value, BuildContext context) {
     if (value!.isEmpty) {
-      return getTranslated(context, "USER_REQUIRED")!;
+      return Local.usernamerequired;
     }
     if (value.length <= 1) {
-      return getTranslated(context, "USER_LENGTH")!;
+      return Local.usernamelenth;
     }
     return null;
   }
@@ -91,7 +92,7 @@ class StringValidation {
   }
 }
 
-// for the translation of string
+//for the translation of string
 String? getTranslated(BuildContext context, String key) {
   return DemoLocalization.of(context)!.translate(key);
 }

@@ -1,46 +1,45 @@
 import 'dart:io';
-import 'package:country_code_picker/country_localizations.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:fisuq_vendor/Provider/theme.dart';
-import 'package:fisuq_vendor/theming/theme.dart';
-import 'package:fisuq_vendor/tools/constants.dart';
+import 'package:vendor/helper/constant.dart';
+import 'package:vendor/helper/push_notification_service.dart';
+import 'package:vendor/helper/theming.dart';
+import 'package:vendor/provider/add_product_provider.dart';
+import 'package:vendor/provider/attribute_set_provider.dart';
+import 'package:vendor/provider/category_provider.dart';
+import 'package:vendor/provider/country_provider.dart';
+import 'package:vendor/provider/edit_product_provider.dart';
+import 'package:vendor/provider/faq_provider.dart';
+import 'package:vendor/provider/home_provider.dart';
+import 'package:vendor/provider/login_provider.dart';
+import 'package:vendor/provider/media_provider.dart';
+import 'package:vendor/provider/order_list_provider.dart';
+import 'package:vendor/provider/privacy_provider.dart';
+import 'package:vendor/provider/product_list_provider.dart';
+import 'package:vendor/provider/profile_provider.dart';
+import 'package:vendor/provider/review_list_provider.dart';
+import 'package:vendor/provider/sales_report_provider.dart';
+import 'package:vendor/provider/search_provider.dart';
+import 'package:vendor/provider/setting_provider.dart';
+import 'package:vendor/provider/stockmanagement_provider.dart';
+import 'package:vendor/provider/tax_provider.dart';
+import 'package:vendor/provider/theme.dart';
+import 'package:vendor/provider/wallet_provider.dart';
+import 'package:vendor/provider/zipcode_provider.dart';
+import 'package:vendor/screen/splash_screen/splash_screen.dart';
+import 'package:vendor/state/utility/prefs_provider.dart';
+import 'package:vendor/tools/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:fisuq_vendor/Provider/faqProvider.dart';
-import 'package:fisuq_vendor/firebase_options.dart';
+import 'package:vendor/firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'Helper/Constant.dart';
-import 'Helper/PushNotificationService.dart';
-import 'Localization/Demo_Localization.dart';
-import 'Localization/Language_Constant.dart';
-import 'Provider/ProductListProvider.dart';
-import 'Provider/ProfileProvider.dart';
-import 'Provider/addProductProvider.dart';
-import 'Provider/attributeSetProvider.dart';
-import 'Provider/categoryProvider.dart';
-import 'Provider/countryProvider.dart';
-import 'Provider/editProductProvider.dart';
-import 'Provider/home_provider.dart';
-import 'Provider/loginProvider.dart';
-import 'Provider/mediaProvider.dart';
-import 'Provider/orderListProvider.dart';
-import 'Provider/privacyProvider.dart';
-import 'Provider/reviewListProvider.dart';
-import 'Provider/salesReportProvider.dart';
-import 'Provider/searchProvider.dart';
-import 'Provider/settingProvider.dart';
-import 'Provider/stockmanagementProvider.dart';
-import 'Provider/taxProvider.dart';
-import 'Provider/walletProvider.dart';
-import 'Provider/zipcodeProvider.dart';
-import 'Screen/SplashScreen/splash_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' as riverpod;
 
 late AndroidNotificationChannel channel;
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
@@ -56,7 +55,7 @@ class MyHttpOverrides extends HttpOverrides {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await EasyLocalization.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -88,72 +87,47 @@ void main() async {
         ?.createNotificationChannel(channel);
   }
   runApp(
-    ChangeNotifierProvider<ThemeNotifier>(
-      create: (BuildContext context) {
-        String? theme = prefs.getString(appTheme);
-        if (theme == dark) {
-          isDarkTheme = 'true';
-        } else if (theme == light) {
-          isDarkTheme = 'false';
-        }
-        if (theme == null || theme == '' || theme == systemDefault) {
-          prefs.setString(appTheme, systemDefault);
-          var brightness = SchedulerBinding.instance.window.platformBrightness;
-          isDarkTheme = (brightness == Brightness.dark).toString();
-          return ThemeNotifier(ThemeMode.system);
-        }
-        return ThemeNotifier(theme == light ? ThemeMode.light : ThemeMode.dark);
-      },
-      child: FisuqVendor(sharedPreferences: prefs),
+    EasyLocalization(
+      supportedLocales: Locals.all,
+      path: 'assets/l10n',
+      fallbackLocale: Locals.all[0],
+      child: riverpod.ProviderScope(
+        overrides: [
+          prefsProvider.overrideWithValue(prefs),
+        ],
+        child: ChangeNotifierProvider<ThemeNotifier>(
+          create: (BuildContext context) {
+            String? theme = prefs.getString(appTheme);
+            if (theme == dark) {
+              isDarkTheme = 'true';
+            } else if (theme == light) {
+              isDarkTheme = 'false';
+            }
+            if (theme == null || theme == '' || theme == systemDefault) {
+              prefs.setString(appTheme, systemDefault);
+              var brightness =
+                  SchedulerBinding.instance.window.platformBrightness;
+              isDarkTheme = (brightness == Brightness.dark).toString();
+              return ThemeNotifier(ThemeMode.system);
+            }
+            return ThemeNotifier(
+                theme == light ? ThemeMode.light : ThemeMode.dark);
+          },
+          child: Vendor(),
+        ),
+      ),
     ),
   );
 }
 
-class FisuqVendor extends StatefulWidget {
-  late SharedPreferences? sharedPreferences;
-  FisuqVendor({
-    super.key,
-    this.sharedPreferences,
-  });
-  static void setLocale(BuildContext context, Locale newLocale) {
-    _FisuqVendorState state =
-        context.findAncestorStateOfType<_FisuqVendorState>()!;
-    state.setLocale(newLocale);
-  }
+class Vendor extends StatefulWidget {
+  Vendor({super.key});
 
   @override
-  State<FisuqVendor> createState() => _FisuqVendorState();
+  State<Vendor> createState() => _VendorState();
 }
 
-class _FisuqVendorState extends State<FisuqVendor> {
-  Locale? _locale;
-
-  setLocale(Locale locale) {
-    if (mounted) {
-      setState(
-        () {
-          _locale = locale;
-        },
-      );
-    }
-  }
-
-  @override
-  void didChangeDependencies() {
-    getLocale().then(
-      (locale) {
-        if (mounted) {
-          setState(
-            () {
-              _locale = locale;
-            },
-          );
-        }
-      },
-    );
-    super.didChangeDependencies();
-  }
-
+class _VendorState extends State<Vendor> {
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
@@ -204,21 +178,9 @@ class _FisuqVendorState extends State<FisuqVendor> {
       ],
       child: MaterialApp(
         title: title,
-        locale: _locale,
-        localizationsDelegates: const [
-          CountryLocalizations.delegate,
-          DemoLocalization.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('en', 'US'),
-          Locale('ar', 'DZ'),
-          Locale('hi', 'IN'),
-          Locale('zh', 'CN'),
-          Locale('ru', 'RU'),
-        ],
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
         localeResolutionCallback: (locale, supportedLocales) {
           for (var supportedLocale in supportedLocales) {
             if (supportedLocale.languageCode == locale!.languageCode &&

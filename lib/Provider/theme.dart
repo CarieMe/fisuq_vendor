@@ -1,12 +1,10 @@
-// ignore_for_file: use_build_context_synchronously
-
-import 'package:fisuq_vendor/Widget/validation.dart';
-import 'package:fisuq_vendor/tools/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vendor/tools/constants.dart';
+import 'package:vendor/widget/validation.dart';
 
 class ThemeProvider extends ChangeNotifier {
   int activeThemeIndex = 0;

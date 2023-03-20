@@ -1,29 +1,26 @@
-import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:fisuq_vendor/Helper/Color.dart';
-import 'package:fisuq_vendor/Widget/desing.dart';
-import 'package:fisuq_vendor/Widget/routes.dart';
-import '../../Helper/Constant.dart';
-import '../../Provider/loginProvider.dart';
-import '../../Widget/ButtonDesing.dart';
-import '../../Provider/settingProvider.dart';
-import '../../Widget/networkAvailablity.dart';
-import '../../Provider/privacyProvider.dart';
-import '../../Widget/systemChromeSettings.dart';
-import '../../Widget/validation.dart';
-import '../../Widget/noNetwork.dart';
-import '../TermFeed/policys.dart';
-import 'SendOtp.dart';
+import 'package:vendor/helper/color.dart';
+import 'package:vendor/helper/constant.dart';
+import 'package:vendor/helper/exports.dart';
+import 'package:vendor/helper/theming.dart';
+import 'package:vendor/screen/authentication/send_otp.dart';
+import 'package:vendor/screen/term_feed/policys.dart';
+import 'package:vendor/widget/design.dart';
+import 'package:vendor/widget/network_availablity.dart';
+import 'package:vendor/widget/no_network.dart';
+import 'package:vendor/widget/routes.dart';
+import 'package:vendor/widget/system_chrome_settings.dart';
+import 'package:vendor/widget/validation.dart';
 
 class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+  const Login({super.key});
 
   @override
-  _LoginState createState() => _LoginState();
+  State<Login> createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> with TickerProviderStateMixin {
@@ -67,20 +64,10 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
         ),
       ),
     );
-
-    //demo
-    // setState(() {
-    //   mobileController.text = "9988776655";
-    //   passwordController.text = "12345678";
-    // });
-
-    // //developer
-    setState(
-      () {
-        mobileController.text = "Enter mobile number";
-        passwordController.text = "Enter password";
-      },
-    );
+    setState(() {
+      //mobileController.text = "Enter mobile number";
+      //passwordController.text = "Enter password";
+    });
   }
 
 //==============================================================================
@@ -89,7 +76,9 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
   Future<void> _playAnimation() async {
     try {
       await context.read<LoginProvider>().buttonController!.forward();
-    } on TickerCanceled {}
+    } on TickerCanceled {
+      debugPrint('cancelled');
+    }
   }
 
   void validateAndSubmit() async {
@@ -103,25 +92,9 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
 //============================= Network Checking ===============================
 
   Future<void> checkNetwork() async {
-    isNetworkAvail = await isNetworkAvailable();
-    if (isNetworkAvail) {
-      context.read<LoginProvider>().getLoginUser(
-            context,
-            scaffoldMessengerKey,
-            setStateNow,
-          );
-    } else {
-      Future.delayed(const Duration(seconds: 2)).then(
-        (_) async {
-          await context.read<LoginProvider>().buttonController!.reverse();
-          setState(
-            () {
-              isNetworkAvail = false;
-            },
-          );
-        },
-      );
-    }
+    context
+        .read<LoginProvider>()
+        .getLoginUser(context, scaffoldMessengerKey, setStateNow);
   }
 
   bool validateAndSave() {
@@ -147,23 +120,9 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
 //==============================================================================
 //============================= No Internet Widget =============================
   setStateNoInternate() async {
-    _playAnimation();
-
-    Future.delayed(const Duration(seconds: 2)).then(
-      (_) async {
-        isNetworkAvail = await isNetworkAvailable();
-        if (isNetworkAvail) {
-          Navigator.pushReplacement(
-            context,
-            CupertinoPageRoute(builder: (BuildContext context) => super.widget),
-          );
-        } else {
-          await context.read<LoginProvider>().buttonController!.reverse();
-          setState(
-            () {},
-          );
-        }
-      },
+    Navigator.pushReplacement(
+      context,
+      CupertinoPageRoute(builder: (BuildContext context) => super.widget),
     );
   }
 
@@ -182,7 +141,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Text(
-            getTranslated(context, "CONTINUE_AGREE_LBL")!,
+            Local.continueandagree,
             style: Theme.of(context).textTheme.caption!.copyWith(
                   color: fontColor,
                   fontWeight: FontWeight.normal,
@@ -203,14 +162,14 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                             ChangeNotifierProvider<SystemProvider>(
                           create: (context) => SystemProvider(),
                           child: Policy(
-                            title: getTranslated(context, "TERM_CONDITIONS")!,
+                            title: Local.termconditions,
                           ),
                         ),
                       ),
                     );
                   },
                   child: Text(
-                    getTranslated(context, 'TERMS_SERVICE_LBL')!,
+                    Local.termsandconditions,
                     style: Theme.of(context).textTheme.caption!.copyWith(
                         color: fontColor,
                         decoration: TextDecoration.underline,
@@ -220,7 +179,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                 width: 5.0,
               ),
               Text(
-                getTranslated(context, "AND_LBL")!,
+                Local.and,
                 style: Theme.of(context)
                     .textTheme
                     .caption!
@@ -238,14 +197,14 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                           ChangeNotifierProvider<SystemProvider>(
                         create: (context) => SystemProvider(),
                         child: Policy(
-                          title: getTranslated(context, "PRIVACYPOLICY")!,
+                          title: Local.privacypolicy,
                         ),
                       ),
                     ),
                   );
                 },
                 child: Text(
-                  getTranslated(context, "PRIVACYPOLICY")!,
+                  Local.privacypolicylabel,
                   style: Theme.of(context).textTheme.caption!.copyWith(
                         color: fontColor,
                         decoration: TextDecoration.underline,
@@ -281,31 +240,50 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
       key: scaffoldMessengerKey,
       child: Scaffold(
         key: _scaffoldKey,
+        backgroundColor: Theme.of(context).backgroundColor,
         body: isNetworkAvail
-            ? SingleChildScrollView(
-                padding: EdgeInsets.only(
-                  top: 23,
-                  left: 23,
-                  right: 23,
-                  bottom: MediaQuery.of(context).viewInsets.bottom,
-                ),
-                child: Form(
-                  key: _formkey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      getLogo(),
-                      signInTxt(),
-                      signInSubTxt(),
-                      setMobileNo(),
-                      setPass(),
-                      forgetPass(),
-                      loginBtn(),
-                      setDontHaveAcc(),
-                      // termAndPolicyTxt(),
-                      const SizedBox(
-                        height: 10,
+            ? Form(
+                key: _formkey,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 100, 20, 50),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: <Widget>[
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          getLogo(),
+                        ],
                       ),
+
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          signInTxt(),
+                          signInSubTxt(),
+                          setMobileNo(),
+                          setPass(),
+                        ],
+                      ),
+
+                      //forgetPass(),
+                      Visibility(
+                        visible: MediaQuery.of(context).viewInsets.bottom == 0,
+                        replacement: const SizedBox.shrink(),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            loginBtn(),
+                          ],
+                        ),
+                      ),
+
+                      //setDontHaveAcc(),
+                      // termAndPolicyTxt(),
                     ],
                   ),
                 ),
@@ -322,7 +300,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
       child: Align(
         alignment: Alignment.center,
         child: Text(
-          getTranslated(context, 'Login In')!,
+          Local.login,
           style: const TextStyle(
             color: primary,
             fontSize: textFontSize30,
@@ -368,40 +346,19 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
   setMobileNo() {
     return Padding(
       padding: const EdgeInsets.only(top: 40),
-      child: Container(
-        height: 53,
-        width: double.maxFinite,
-        decoration: BoxDecoration(
-          color: lightWhite,
-          borderRadius: BorderRadius.circular(circularBorderRadius10),
-        ),
-        alignment: Alignment.center,
-        child: TextFormField(
+      child: NeuContainer.simple(
+        context: context,
+        child: TextFildLogin(
           onFieldSubmitted: (v) {
             FocusScope.of(context).requestFocus(passFocus);
           },
-          style: TextStyle(
-              color: black.withOpacity(0.7),
-              fontWeight: FontWeight.bold,
-              fontSize: textFontSize13),
           keyboardType: TextInputType.number,
           controller: mobileController,
           focusNode: monoFocus,
-          textInputAction: TextInputAction.next,
+          textInputAction: TextInputAction.done,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 13,
-                vertical: 5,
-              ),
-              hintText: getTranslated(context, "Mobile Number")!,
-              hintStyle: TextStyle(
-                  color: black.withOpacity(0.3),
-                  fontWeight: FontWeight.bold,
-                  fontSize: textFontSize13),
-              fillColor: lightWhite,
-              border: InputBorder.none),
           validator: (val) => StringValidation.validateMob(val!, context),
+          hintText: "Enter mobile number",
           onSaved: (String? value) {
             context.read<LoginProvider>().mobile = value;
           },
@@ -413,63 +370,36 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
   setPass() {
     return Padding(
       padding: const EdgeInsets.only(top: 18),
-      child: Container(
-        height: 53,
-        width: double.maxFinite,
-        decoration: BoxDecoration(
-          color: lightWhite,
-          borderRadius: BorderRadius.circular(circularBorderRadius10),
-        ),
-        alignment: Alignment.center,
-        child: TextFormField(
-          style: TextStyle(
-              color: black.withOpacity(0.7),
-              fontWeight: FontWeight.bold,
-              fontSize: textFontSize13),
-          onFieldSubmitted: (v) {
-            passFocus!.unfocus();
-          },
+      child: NeuContainer.simple(
+        context: context,
+        child: TextFildLogin(
           keyboardType: TextInputType.text,
           obscureText: isShowPass,
           controller: passwordController,
           focusNode: passFocus,
-          textInputAction: TextInputAction.next,
+          textInputAction: TextInputAction.done,
+          maxLines: 1,
           validator: (val) => StringValidation.validatePass(val!, context),
           onSaved: (String? value) {
             context.read<LoginProvider>().password = value;
           },
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 13,
-              vertical: 5,
-            ),
-            suffixIcon: InkWell(
-              onTap: () {
-                setState(
-                  () {
-                    isShowPass = !isShowPass;
-                  },
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsetsDirectional.only(end: 10.0),
-                child: Icon(
-                  !isShowPass ? Icons.visibility : Icons.visibility_off,
-                  color: fontColor.withOpacity(0.4),
-                  size: 22,
-                ),
+          hintText: Local.passwordlable,
+          suffixIcon: InkWell(
+            onTap: () {
+              setState(
+                () {
+                  isShowPass = !isShowPass;
+                },
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsetsDirectional.only(end: 10.0),
+              child: Icon(
+                !isShowPass ? Icons.visibility : Icons.visibility_off,
+                color: fontColor.withOpacity(0.4),
+                size: 22,
               ),
             ),
-            suffixIconConstraints:
-                const BoxConstraints(minWidth: 40, maxHeight: 20),
-            hintText: getTranslated(context, "PASSHINT_LBL"),
-            hintStyle: TextStyle(
-              color: fontColor.withOpacity(0.3),
-              fontWeight: FontWeight.bold,
-              fontSize: textFontSize13,
-            ),
-            fillColor: lightWhite,
-            border: InputBorder.none,
           ),
         ),
       ),
@@ -477,76 +407,42 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
   }
 
   loginBtn() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 10.0),
-      child: Center(
-        child: AppBtn(
-          title: getTranslated(context, "SIGNIN_LBL")!,
-          btnAnim: buttonSqueezeanimation,
-          btnCntrl: context.read<LoginProvider>().buttonController,
-          onBtnSelected: () async {
-            validateAndSubmit();
-          },
-        ),
-      ),
+    return AppButton.main(
+      data: Local.signinlabel,
+      onTap: () async {
+        validateAndSubmit();
+      },
     );
   }
 
   Widget getLogo() {
-    return Container(
+    return SvgPicture.asset(
+      DesignConfiguration.setSvgPath('logo3'),
       alignment: Alignment.center,
-      padding: const EdgeInsets.only(top: 60),
-      child: SvgPicture.asset(
-        DesignConfiguration.setSvgPath('loginlogo'),
-        alignment: Alignment.center,
-        height: 90,
-        width: 90,
-        fit: BoxFit.contain,
-      ),
+      height: 70,
+      width: 90,
+      fit: BoxFit.contain,
     );
-    // Positioned(
-    //   left: (MediaQuery.of(context).size.width / 2) - 50,
-    //   top: (MediaQuery.of(context).size.height * 0.2) - 50,
-    //   child: SizedBox(
-    //     width: 100,
-    //     height: 100,
-    //     child: SvgPicture.asset(
-    //       DesignConfiguration.setSvgPath('loginlogo'),
-    //     ),
-    //   ),
-    // );
   }
 
   signInSubTxt() {
-    return Padding(
-      padding: const EdgeInsetsDirectional.only(
+    return const Padding(
+      padding: EdgeInsetsDirectional.only(
         top: 13.0,
       ),
-      child: Text(
-        'Please enter your login details below to start using app.',
-        style: Theme.of(context).textTheme.subtitle2!.copyWith(
-              color: black.withOpacity(0.38),
-              fontWeight: FontWeight.bold,
-              fontFamily: 'ubuntu',
-            ),
+      child: BlNor(
+        data: 'Please enter your login details below to start using app.',
       ),
     );
   }
 
   signInTxt() {
-    return Padding(
-      padding: const EdgeInsetsDirectional.only(
+    return const Padding(
+      padding: EdgeInsetsDirectional.only(
         top: 40.0,
       ),
-      child: Text(
-        "Welcome vendor",
-        style: Theme.of(context).textTheme.headline6!.copyWith(
-              color: black,
-              fontWeight: FontWeight.bold,
-              fontSize: textFontSize20,
-              letterSpacing: 0.8,
-              fontFamily: 'ubuntu',
-            ),
+      child: HlBol(
+        data: "Welcome Fisuq Vendor",
       ),
     );
   }
